@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HarmonyFX — بوابتي</title>
+<link rel="icon" href="harmony-logo-01.png">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("iLZjn9PNYzglkaYKn");</script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Arabic:wght@400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:      #0D1F2D;
+    --navy-lt:   #14293A;
+    --teal:      #1A3A4A;
+    --gold:      #C9A84C;
+    --gold-lt:   #D9BF71;
+    --gold-dim:  rgba(201,168,76,0.1);
+    --cream:     #F5F0E8;
+    --steel:     #6B8F9E;
+    --line:      rgba(245,240,232,0.09);
+    --green:     #6FBF8F;
+    --green-dim: rgba(111,191,143,0.1);
+    --yellow:    #D9BF71;
+    --yellow-dim:rgba(217,191,113,0.1);
+    --err:       #E8837A;
+  }
+
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    min-height: 100vh;
+    direction: rtl;
+  }
+  body.en { font-family: 'Inter', sans-serif; direction: ltr; text-align: left; }
+
+  .lang-ar { display: block; }
+  .lang-en { display: none; }
+  span.lang-ar { display: inline; }
+  span.lang-en { display: none; }
+  body.en .lang-ar { display: none; }
+  body.en .lang-en { display: block; }
+  body.en span.lang-ar { display: none; }
+  body.en span.lang-en { display: inline; }
+
+  /* ── NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: var(--navy-lt);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo img { height: 36px; width: auto; }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-user {
+    font-size: 13px;
+    color: var(--steel);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-user strong { color: var(--cream); font-weight: 500; }
+  .lang-toggle {
+    display: flex;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .lang-btn {
+    padding: 4px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--steel);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--gold); color: var(--navy); }
+  .nav-logout {
+    font-size: 12px;
+    color: var(--steel);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    font-family: 'Noto Sans Arabic', sans-serif;
+  }
+  .nav-logout:hover { color: var(--gold-lt); }
+
+  /* ── LAYOUT */
+  .portal-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .portal-greeting {
+    margin-bottom: 32px;
+  }
+  .portal-greeting h1 {
+    font-family: 'Noto Serif Arabic', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+  body.en .portal-greeting h1 { font-family: 'Playfair Display', serif; font-weight: 500; }
+  .portal-greeting p { font-size: 14px; color: var(--steel); font-weight: 300; }
+
+  /* ── STATUS CARD */
+  .status-card {
+    background: var(--navy-lt);
+    border: 1px solid var(--line);
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .status-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px; height: 100%;
+    background: var(--gold);
+  }
+  body.en .status-card::before { right: auto; left: 0; }
+  .status-card.green::before { background: var(--green); }
+  .status-card.yellow::before { background: var(--yellow); }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 16px;
+  }
+  .status-badge.pending { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(217,191,113,0.25); }
+  .status-badge.success { background: var(--green-dim); color: var(--green); border: 1px solid rgba(111,191,143,0.25); }
+  .status-badge.error { background: rgba(232,131,122,0.1); color: var(--err); border: 1px solid rgba(232,131,122,0.2); }
+  .status-badge.info { background: var(--gold-dim); color: var(--gold-lt); border: 1px solid rgba(201,168,76,0.2); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .status-title {
+    font-family: 'Noto Serif Arabic', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  body.en .status-title { font-family: 'Playfair Display', serif; font-weight: 500; }
+  .status-text { font-size: 14px; font-weight: 300; color: var(--steel); line-height: 1.8; margin-bottom: 20px; }
+
+  .rejection-reason {
+    background: rgba(232,131,122,0.07);
+    border: 1px solid rgba(232,131,122,0.15);
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--err);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  /* ── BUTTONS */
+  .btn-primary {
+    display: inline-block;
+    padding: 13px 32px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    transition: background 0.2s;
+  }
+  body.en .btn-primary { font-family: 'Inter', sans-serif; }
+  .btn-primary:hover { background: var(--gold-lt); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-outline {
+    display: inline-block;
+    padding: 13px 32px;
+    background: transparent;
+    color: var(--cream);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    transition: border-color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); }
+
+  /* ── MT5 CARD */
+  .mt5-card {
+    background: var(--navy-lt);
+    border: 1px solid var(--line);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .mt5-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    margin-bottom: 24px;
+    font-family: 'Inter', sans-serif;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mt5-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .mt5-field { }
+  .mt5-field-label { font-size: 11px; color: var(--steel); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
+  .mt5-field-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .copy-btn {
+    font-size: 11px;
+    color: var(--steel);
+    background: var(--teal);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.2s;
+  }
+  .copy-btn:hover { color: var(--cream); }
+
+  /* ── REFERRAL CARD */
+  .referral-card {
+    background: var(--navy-lt);
+    border: 1px solid var(--line);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .referral-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+  }
+  .referral-card-sub { font-size: 14px; color: var(--gold-lt); margin-bottom: 20px; font-weight: 600; }
+  .referral-link-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--teal);
+    border: 1px solid var(--line);
+  }
+  .referral-link-text {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--steel);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    direction: ltr;
+  }
+  .referral-copy-btn {
+    padding: 12px 20px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .referral-copy-btn:hover { background: var(--gold-lt); }
+  .referral-stats { display: flex; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .referral-stat-label { font-size: 11px; color: var(--steel); text-transform: uppercase; letter-spacing: 1px; font-family: 'Inter', sans-serif; margin-bottom: 4px; }
+  .referral-stat-value { font-size: 22px; font-weight: 700; color: var(--cream); font-family: 'Inter', sans-serif; }
+
+  /* ── FUNDING CARD */
+  .funding-card {
+    background: var(--navy-lt);
+    border: 1px solid var(--line);
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .funding-method-btn {
+    flex: 1; min-width: 140px;
+    background: var(--teal); border: 1px solid var(--line); color: var(--cream);
+    padding: 14px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .funding-method-btn:hover { border-color: var(--gold); background: var(--navy-lt); }
+  .funding-select {
+    width: 100%; background: var(--teal); border: 1px solid var(--line); color: var(--cream);
+    padding: 12px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+  }
+  .funding-tab-btn {
+    flex: 1;
+    background: var(--teal); border: 1px solid var(--line); color: var(--cream);
+    padding: 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: all 0.15s;
+  }
+  .funding-tab-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .funding-form-group { margin-top: 16px; }
+  .funding-label { font-size: 11px; color: var(--steel); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-family: 'Inter', sans-serif; display: block; }
+  .funding-input {
+    width: 100%; background: var(--teal); border: 1px solid var(--line); color: var(--cream);
+    padding: 12px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
+  }
+  .funding-note { font-size: 12px; color: var(--steel); line-height: 1.6; margin-top: 8px; }
+  .funding-phone-display { font-size: 20px; font-weight: 700; color: var(--gold-lt); font-family: 'Inter', sans-serif; direction: ltr; text-align: center; padding: 12px; background: var(--teal); border: 1px solid var(--gold); margin: 8px 0; }
+
+  .history-row { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .history-row:last-child { border-bottom: none; }
+  .history-meta { font-size: 13px; color: var(--cream); }
+  .history-sub { font-size: 11px; color: var(--steel); margin-top: 2px; }
+  .history-status { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
+  .history-status.pending { background: var(--yellow-dim); color: var(--yellow); }
+  .history-status.done { background: var(--green-dim); color: var(--green); }
+  .history-status.rejected { background: rgba(232,131,122,0.1); color: var(--err); }
+  .history-status.processing { background: var(--gold-dim); color: var(--gold-lt); }
+  .history-link { color: var(--gold-lt); font-size: 11px; text-decoration: none; font-family: 'Inter', sans-serif; }
+  .history-link:hover { text-decoration: underline; }
+
+  /* Floating instead of inline at the top of the page -- these auto-dismiss
+     after 30s anyway, so pinning them where a scrolled-down client will
+     actually see them matters more than keeping them in normal document flow. */
+  #txn-banners {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+    width: calc(100% - 32px); max-width: 480px; z-index: 300;
+  }
+  .txn-banner {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; margin-bottom: 12px;
+    border: 1px solid var(--line); font-size: 13px; line-height: 1.6;
+    background: var(--navy-lt); box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  }
+  .txn-banner.success { background: var(--green-dim); border-color: rgba(111,191,143,0.3); color: var(--green); backdrop-filter: blur(6px); }
+  .txn-banner.error { background: rgba(232,131,122,0.1); border-color: rgba(232,131,122,0.25); color: var(--err); backdrop-filter: blur(6px); }
+  .txn-banner-close {
+    margin-inline-start: auto; background: none; border: none; color: inherit;
+    font-size: 16px; cursor: pointer; line-height: 1; opacity: 0.7; flex-shrink: 0;
+  }
+  .txn-banner-close:hover { opacity: 1; }
+
+  .funding-soon {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--steel);
+    font-family: 'Inter', sans-serif;
+    background: var(--teal);
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+  }
+  body.en .funding-soon { left: auto; right: 16px; }
+  .funding-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+  }
+  .funding-card-sub { font-size: 13px; color: var(--steel); font-weight: 300; }
+
+  /* ── LOADING */
+  .loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .loading-spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--line);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 13px; color: var(--steel); }
+
+  @media (max-width: 600px) {
+    nav { padding: 10px 16px; height: auto; flex-wrap: wrap; row-gap: 10px; margin-bottom: 8px; }
+    .nav-logo img { height: 30px; }
+    .nav-right { flex-wrap: wrap; gap: 10px; width: 100%; justify-content: space-between; }
+    .nav-user { flex-direction: column; align-items: flex-start; gap: 2px; }
+    #nav-email { margin-inline-start: 0; display: block; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .portal-wrap { padding: 24px 16px 60px; }
+    .status-card, .mt5-card, .referral-card, .funding-card { padding: 24px 20px; }
+    .mt5-fields { grid-template-columns: 1fr; }
+    .referral-stats { flex-direction: column; gap: 16px; }
+  }
+
+</style>
+</head>
+<body id="body" class="en">
+
+<nav>
+  <a href="portal.html" class="nav-logo"><img src="harmony-logo-02.png" alt="HarmonyFX"></a>
+  <div class="nav-right">
+    <div class="nav-user">
+      <span class="lang-ar">مرحباً، </span>
+      <span class="lang-en">Hello, </span>
+      <strong id="nav-name">...</strong>
+      <span id="nav-email" dir="ltr" style="color:var(--steel);font-size:11px;margin-inline-start:8px;"></span>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="nav-logout" onclick="logout()">
+      <span class="lang-ar">خروج</span>
+      <span class="lang-en">Logout</span>
+    </button>
+  </div>
+</nav>
+
+<div class="portal-wrap">
+
+  <!-- Loading -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-spinner"></div>
+    <p class="loading-text lang-ar">جارٍ تحميل بياناتك...</p>
+    <p class="loading-text lang-en">Loading your data...</p>
+  </div>
+
+  <!-- Portal content (hidden until loaded) -->
+  <div id="portal-content" style="display:none;">
+
+    <!-- Greeting -->
+    <div class="portal-greeting">
+      <h1 id="portal-title">بوابتي / My Portal</h1>
+    </div>
+
+    <!-- Dismissible notification banners for resolved deposit/withdrawal requests -->
+    <div id="txn-banners"></div>
+
+    <!-- STATUS: email not verified -->
+    <div class="status-card" id="card-not-verified" style="display:none;">
+      <div class="status-badge info"><div class="status-dot"></div><span class="lang-ar">البريد غير مفعّل</span><span class="lang-en">Email Not Verified</span></div>
+      <h2 class="status-title"><span class="lang-ar">يرجى تفعيل بريدك الإلكتروني</span><span class="lang-en">Please Verify Your Email</span></h2>
+      <p class="status-text"><span class="lang-ar">أرسلنا رابط التفعيل إلى بريدك الإلكتروني عند التسجيل. يرجى التحقق من صندوق الوارد والضغط على الرابط للمتابعة.</span><span class="lang-en">We sent a verification link to your email when you signed up. Please check your inbox and click the link to continue.</span></p>
+      <button class="btn-primary" onclick="resendVerification()"><span class="lang-ar">إعادة إرسال رابط التفعيل</span><span class="lang-en">Resend Verification Email</span></button>
+    </div>
+
+    <!-- STATUS: pending_kyc -->
+    <div class="status-card" id="card-pending-kyc" style="display:none;">
+      <div class="status-badge info"><div class="status-dot"></div><span class="lang-ar">التحقق مطلوب</span><span class="lang-en">Verification Required</span></div>
+      <h2 class="status-title"><span class="lang-ar">أكمل التحقق من هويتك</span><span class="lang-en">Complete Your Identity Verification</span></h2>
+      <p class="status-text"><span class="lang-ar">للوصول إلى خدمات التداول، نحتاج التحقق من هويتك أولاً. العملية بسيطة ولا تستغرق سوى دقائق.</span><span class="lang-en">To access trading services, we need to verify your identity first. The process is simple and takes only a few minutes.</span></p>
+      <a href="kyc.html" class="btn-primary"><span class="lang-ar">ابدأ التحقق من الهوية</span><span class="lang-en">Start Identity Verification</span></a>
+    </div>
+
+    <!-- STATUS: kyc_submitted -->
+    <div class="status-card yellow" id="card-kyc-submitted" style="display:none;">
+      <div class="status-badge pending"><div class="status-dot"></div><span class="lang-ar">قيد المراجعة</span><span class="lang-en">Under Review</span></div>
+      <h2 class="status-title"><span class="lang-ar">وثائقك قيد المراجعة</span><span class="lang-en">Your Documents Are Under Review</span></h2>
+      <p class="status-text"><span class="lang-ar">استلمنا وثائقك وسيراجعها فريقنا في أقرب وقت. ستتمكن من إنشاء حساب التداول بعد اكتمال التحقق.</span><span class="lang-en">We received your documents and our team will review them shortly. You will be able to create a trading account once verification is complete.</span></p>
+    </div>
+
+    <!-- STATUS: kyc_rejected -->
+    <div class="status-card" id="card-kyc-rejected" style="display:none;">
+      <div class="status-badge error"><div class="status-dot"></div><span class="lang-ar">تم الرفض</span><span class="lang-en">Rejected</span></div>
+      <h2 class="status-title"><span class="lang-ar">تم رفض طلب التحقق</span><span class="lang-en">Verification Request Rejected</span></h2>
+      <div class="rejection-reason" id="rejection-reason-box">
+        <span class="lang-ar">السبب: </span><span class="lang-en">Reason: </span><span id="rejection-reason-text"></span>
+      </div>
+      <p class="status-text"><span class="lang-ar">يرجى تصحيح المشكلة وإعادة تقديم وثائقك.</span><span class="lang-en">Please correct the issue and resubmit your documents.</span></p>
+      <a href="kyc.html" class="btn-primary"><span class="lang-ar">إعادة التقديم</span><span class="lang-en">Resubmit</span></a>
+    </div>
+
+    <!-- STATUS: kyc_approved -->
+    <div class="status-card green" id="card-kyc-approved" style="display:none;">
+      <div class="status-badge success"><div class="status-dot"></div><span class="lang-ar">تم التحقق</span><span class="lang-en">Verified</span></div>
+      <h2 class="status-title"><span class="lang-ar">تم التحقق من هويتك بنجاح</span><span class="lang-en">Identity Verified Successfully</span></h2>
+      <p class="status-text"><span class="lang-ar">يمكنك الآن إنشاء حساب التداول على منصة Harmonic MT5.</span><span class="lang-en">You can now create a trading account on the Harmonic MT5 platform.</span></p>
+      <button class="btn-primary" onclick="requestMT5()"><span class="lang-ar">إنشاء حساب MT5</span><span class="lang-en">Create MT5 Account</span></button>
+    </div>
+
+    <!-- STATUS: mt5_requested -->
+    <div class="status-card yellow" id="card-mt5-requested" style="display:none;">
+      <div class="status-badge pending"><div class="status-dot"></div><span class="lang-ar">جارٍ الإنشاء</span><span class="lang-en">Being Created</span></div>
+      <h2 class="status-title"><span class="lang-ar">جارٍ إنشاء حسابك</span><span class="lang-en">Your Account Is Being Created</span></h2>
+      <p class="status-text"><span class="lang-ar">فريقنا يعمل على إنشاء حساب MT5 الخاص بك. تفقّد بوابتك قريباً لمشاهدة بيانات الدخول.</span><span class="lang-en">Our team is creating your MT5 account. Check your portal soon to see your login details.</span></p>
+    </div>
+
+    <!-- STATUS: active — MT5 details -->
+    <div id="card-active" style="display:none;">
+      <div id="mt5-cards-container"></div>
+      <div class="mt5-card">
+        <p style="font-size:12px;color:var(--steel);line-height:1.7;">
+          <span class="lang-ar">تم إرسال كلمة المرور إلى بريدك الإلكتروني عند تفعيل كل حساب. تحتاج إعادة إرسالها؟</span>
+          <span class="lang-en">Your password was emailed to you when each account was activated. Need it resent?</span>
+          <a href="#" id="whatsapp-resend-link" target="_blank" rel="noopener" style="color:var(--green);text-decoration:none;font-weight:700;">
+            <span class="lang-ar">تواصل معنا عبر واتساب</span>
+            <span class="lang-en">Contact us on WhatsApp</span>
+          </a>
+        </p>
+      </div>
+
+      <div id="mt5-pending-inline-notice" class="mt5-card" style="display:none;text-align:center;">
+        <div class="status-badge pending" style="margin:0 auto 10px;"><div class="status-dot"></div><span class="lang-ar">جارٍ الإنشاء</span><span class="lang-en">Being Created</span></div>
+        <p style="margin:0;color:var(--steel);font-size:14px;">
+          <span class="lang-ar">طلب حساب MT5 إضافي قيد المعالجة — سنقوم بإشعارك فور جهوزيته.</span>
+          <span class="lang-en">Your additional MT5 account request is being processed — we'll notify you once it's ready.</span>
+        </p>
+      </div>
+
+      <div id="request-another-box" class="mt5-card" style="display:none;text-align:center;">
+        <button class="btn-primary" onclick="requestMT5()">
+          <span class="lang-ar">طلب حساب MT5 إضافي</span><span class="lang-en">Request Another MT5 Account</span>
+        </button>
+      </div>
+
+      <!-- Referral -->
+      <div class="referral-card">
+        <div class="referral-card-title lang-ar">رابط الإحالة</div>
+        <div class="referral-card-title lang-en">Referral Link</div>
+        <p class="referral-card-sub lang-ar">شارك رابطك مع أصدقائك واكسب عمولات على تداولاتهم</p>
+        <p class="referral-card-sub lang-en">Share your link with friends and earn commissions on their trades</p>
+        <div class="referral-link-box">
+          <div class="referral-link-text" id="referral-link-text">—</div>
+          <button class="referral-copy-btn" onclick="copyReferral()">
+            <span class="lang-ar">نسخ الرابط</span><span class="lang-en">Copy Link</span>
+          </button>
+        </div>
+        <div class="referral-stats">
+          <div>
+            <div class="referral-stat-label lang-ar">عدد الإحالات</div>
+            <div class="referral-stat-label lang-en">Referrals</div>
+            <div class="referral-stat-value" id="referral-count">0</div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Fund & Withdraw (only shown once the client actually has an MT5
+         account to fund -- kept inside card-active, not shown for KYC-only
+         or MT5-pending states). -->
+    <div class="funding-card">
+      <div class="funding-card-title lang-ar">تمويل وسحب الحساب</div>
+      <div class="funding-card-title lang-en">Fund & Withdraw</div>
+
+      <div id="funding-account-picker" style="display:none;margin-top:16px;margin-bottom:4px;">
+        <div class="mt5-field-label lang-ar" style="margin-bottom:6px;">أي حساب؟</div>
+        <div class="mt5-field-label lang-en" style="margin-bottom:6px;">Which account?</div>
+        <select id="funding-account-select" class="funding-select"></select>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="funding-tab-btn active" id="tab-btn-deposit" onclick="showFundingTab('deposit')">
+          <span class="lang-ar">إيداع</span><span class="lang-en">Deposit</span>
+        </button>
+        <button class="funding-tab-btn" id="tab-btn-withdraw" onclick="showFundingTab('withdraw')">
+          <span class="lang-ar">سحب</span><span class="lang-en">Withdraw</span>
+        </button>
+      </div>
+
+      <!-- DEPOSIT TAB -->
+      <div id="tab-deposit" style="margin-top:20px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="funding-method-btn" style="display:flex;align-items:center;justify-content:center;gap:10px;" onclick="selectDepositMethod('Whish Money')">
+            <img src="whish-money-logo.svg" alt="" style="height:34px;width:34px;flex-shrink:0;display:block;border-radius:8px;">
+            Whish Money
+          </button>
+          <button class="funding-method-btn" style="display:flex;align-items:center;justify-content:center;gap:10px;" onclick="selectDepositMethod('USDT')">
+            <svg viewBox="0 0 32 32" style="height:28px;width:28px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="16" fill="#26A17B"/>
+              <path fill="#fff" d="M17.5 17.15v-.01c-.11.01-.68.04-1.94.04-1.01 0-1.72-.03-1.97-.04v.02c-3.9-.17-6.81-.86-6.81-1.68 0-.83 2.91-1.51 6.81-1.69v2.7c.25.02.98.06 1.99.06 1.2 0 1.81-.05 1.92-.06v-2.69c3.89.17 6.79.86 6.79 1.68 0 .82-2.9 1.5-6.79 1.67zm0-3.66v-2.41h5.43V7.5H9.11v3.58h5.43v2.41c-4.41.2-7.73 1.07-7.73 2.12 0 1.05 3.32 1.92 7.73 2.12v7.6h2.96v-7.6c4.4-.2 7.72-1.07 7.72-2.12 0-1.05-3.32-1.92-7.72-2.12z"/>
+            </svg>
+            USDT
+          </button>
+        </div>
+
+        <!-- Whish Money deposit form -->
+        <div id="whish-deposit-form" style="display:none;margin-top:16px;">
+          <div class="funding-form-group" style="margin-top:0;">
+            <label class="funding-label lang-ar">المبلغ (USD)</label>
+            <label class="funding-label lang-en">Amount (USD)</label>
+            <input type="number" id="deposit-amount" class="funding-input" placeholder="100" min="1" step="0.01">
+          </div>
+          <div class="funding-form-group">
+            <p class="funding-note lang-ar">حوّل هذا المبلغ عبر Whish Money إلى الرقم التالي:</p>
+            <p class="funding-note lang-en">Transfer this amount via Whish Money to the number below:</p>
+            <div class="funding-phone-display" dir="ltr" style="display:flex;align-items:center;justify-content:center;gap:10px;">
+              <span id="whish-phone-display">—</span>
+              <button type="button" class="copy-btn" onclick="copyText('whish-phone-display')">
+                <span class="lang-ar">نسخ</span><span class="lang-en">Copy</span>
+              </button>
+            </div>
+          </div>
+          <div class="funding-form-group">
+            <label class="funding-label lang-ar">صورة الإيصال</label>
+            <label class="funding-label lang-en">Receipt Screenshot</label>
+            <input type="file" id="deposit-receipt" class="funding-input" accept="image/*">
+          </div>
+          <p id="deposit-error" style="color:var(--err);font-size:13px;margin-top:10px;display:none;"></p>
+          <button class="btn-primary" style="margin-top:16px;width:100%;" id="deposit-submit-btn" onclick="submitDeposit()">
+            <span class="lang-ar">إرسال طلب الإيداع</span><span class="lang-en">Submit Deposit Request</span>
+            <span class="loading-spinner" id="deposit-spinner" style="display:none;width:14px;height:14px;border-width:2px;vertical-align:middle;margin-inline-start:8px;"></span>
+          </button>
+        </div>
+
+        <!-- USDT deposit -- still a WhatsApp hand-off for now -->
+        <div id="usdt-deposit-note" style="display:none;margin-top:16px;">
+          <p class="funding-note lang-ar">سنكمل طلب الإيداع عبر USDT معك مباشرة على واتساب.</p>
+          <p class="funding-note lang-en">We'll finish your USDT deposit request with you directly on WhatsApp.</p>
+          <button class="btn-outline" style="margin-top:12px;" onclick="requestFundingWhatsApp('USDT')">
+            <span class="lang-ar">متابعة عبر واتساب</span><span class="lang-en">Continue on WhatsApp</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- WITHDRAW TAB -->
+      <div id="tab-withdraw" style="display:none;margin-top:20px;">
+        <div class="funding-form-group" style="margin-top:0;">
+          <label class="funding-label lang-ar">المبلغ (USD)</label>
+          <label class="funding-label lang-en">Amount (USD)</label>
+          <input type="number" id="withdraw-amount" class="funding-input" placeholder="100" min="1" step="0.01">
+        </div>
+        <div class="funding-form-group">
+          <label class="funding-label lang-ar">طريقة السحب</label>
+          <label class="funding-label lang-en">Withdrawal Method</label>
+          <select id="withdraw-method" class="funding-select" onchange="onWithdrawMethodChange()">
+            <option value="Whish Money">Whish Money</option>
+            <option value="USDT">USDT</option>
+          </select>
+        </div>
+        <div class="funding-form-group" id="withdraw-whish-fields">
+          <label class="funding-label lang-ar">رقم الهاتف لاستلام المبلغ</label>
+          <label class="funding-label lang-en">Phone Number to Receive Funds</label>
+          <input type="text" id="withdraw-phone" class="funding-input" placeholder="+961XXXXXXXX" dir="ltr">
+        </div>
+        <div class="funding-form-group" id="withdraw-usdt-fields" style="display:none;">
+          <label class="funding-label lang-ar">عنوان محفظة USDT</label>
+          <label class="funding-label lang-en">USDT Wallet Address</label>
+          <input type="text" id="withdraw-wallet" class="funding-input" placeholder="T..." dir="ltr">
+          <label class="funding-label lang-ar" style="margin-top:10px;">الشبكة</label>
+          <label class="funding-label lang-en" style="margin-top:10px;">Network</label>
+          <select id="withdraw-network" class="funding-select">
+            <option value="TRC20">TRC20 (Tron)</option>
+            <option value="ERC20">ERC20 (Ethereum)</option>
+            <option value="BEP20">BEP20 (BNB Smart Chain)</option>
+          </select>
+        </div>
+        <p id="withdraw-error" style="color:var(--err);font-size:13px;margin-top:10px;display:none;"></p>
+        <button class="btn-primary" style="margin-top:16px;width:100%;" id="withdraw-submit-btn" onclick="submitWithdrawal()">
+          <span class="lang-ar">إرسال طلب السحب</span><span class="lang-en">Submit Withdrawal Request</span>
+          <span class="loading-spinner" id="withdraw-spinner" style="display:none;width:14px;height:14px;border-width:2px;vertical-align:middle;margin-inline-start:8px;"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Transaction History (deposits + withdrawals merged, newest first) --
+         collapsed by default; only revealed by an explicit click, and never
+         auto-reopens itself (not on refresh, not after a new submission). -->
+    <div class="funding-card">
+      <div class="funding-card-title lang-ar">سجل العمليات</div>
+      <div class="funding-card-title lang-en">Transaction History</div>
+      <button class="btn-outline" id="txn-history-reveal-btn" style="margin-top:12px;width:100%;" onclick="revealTxnHistory()">
+        <span class="lang-ar">عرض سجل العمليات</span><span class="lang-en">Show Transaction History</span>
+      </button>
+      <div id="txn-history-content" style="display:none;">
+        <div id="txn-history-page1" style="margin-top:12px;"></div>
+        <div id="txn-history-more-pages"></div>
+        <p class="funding-note" id="txn-history-empty" style="display:none;">
+          <span class="lang-ar">لا توجد عمليات بعد.</span><span class="lang-en">No transactions yet.</span>
+        </p>
+        <button class="btn-outline" id="txn-history-more" style="display:none;margin-top:12px;width:100%;" onclick="loadMoreHistory()">
+          <span class="lang-ar">تحميل المزيد</span><span class="lang-en">Load More</span>
+        </button>
+      </div>
+    </div>
+
+  </div> <!-- /card-active -->
+
+  <!-- Support CTA -- a static section instead of a floating bubble that
+       could sit over content or get missed on scroll. -->
+  <div class="funding-card" style="text-align:center;">
+    <p style="font-size:13px;color:var(--steel);line-height:1.8;margin-bottom:14px;">
+      <span class="lang-ar">فريق خدمة العملاء لدينا جاهز لمساعدتك في أي وقت. إذا كان لديك أي استفسار، لا تتردد في التواصل معنا عبر واتساب.</span>
+      <span class="lang-en">Our customer service team is happy to help with any questions you may have — feel free to reach out to us on WhatsApp.</span>
+    </p>
+    <a href="https://wa.me/96170906509" target="_blank" rel="noopener" class="btn-outline" style="display:inline-flex;align-items:center;gap:10px;line-height:1.5;">
+      <svg viewBox="0 0 32 32" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;" xmlns="http://www.w3.org/2000/svg"><path d="M16.001 3C9.101 3 3.5 8.6 3.5 15.5c0 2.3.63 4.46 1.72 6.32L3 29l7.36-2.17a12.42 12.42 0 0 0 5.64 1.37h.005c6.9 0 12.5-5.6 12.5-12.5S22.9 3 16.001 3zm7.34 17.86c-.31.87-1.53 1.6-2.5 1.8-.66.14-1.53.25-4.44-.95-3.73-1.54-6.13-5.33-6.32-5.58-.19-.25-1.5-2-1.5-3.8 0-1.8.94-2.68 1.28-3.05.31-.34.68-.42.9-.42.23 0 .45.002.65.012.21.01.49-.08.76.58.31.75 1.05 2.55 1.14 2.73.09.19.15.4.03.65-.12.25-.19.4-.37.62-.19.22-.4.5-.57.67-.19.19-.39.4-.17.78.22.38.98 1.62 2.11 2.63 1.45 1.29 2.67 1.7 3.05 1.89.38.19.6.16.82-.1.22-.25.94-1.1 1.19-1.48.25-.38.5-.31.84-.19.34.12 2.15 1.02 2.52 1.2.37.19.62.28.71.44.09.15.09.85-.22 1.72z"/></svg>
+      <span style="display:flex;flex-direction:column;gap:2px;">
+        <span><span class="lang-ar">تواصل معنا على واتساب</span><span class="lang-en">Chat with us on WhatsApp</span></span>
+        <span dir="ltr" style="font-size:12px;opacity:0.8;">+961 70 906 509</span>
+      </span>
+    </a>
+  </div>
+
+  </div>
+</div>
+
+<script>
+  function setLang(lang) {
+    const body = document.getElementById('body');
+    const btnAr = document.getElementById('btn-ar');
+    const btnEn = document.getElementById('btn-en');
+    if (lang === 'en') {
+      body.classList.add('en');
+      body.setAttribute('dir', 'ltr');
+      body.setAttribute('lang', 'en');
+      btnEn.classList.add('active');
+      btnAr.classList.remove('active');
+
+    } else {
+      body.classList.remove('en');
+      body.setAttribute('dir', 'rtl');
+      body.setAttribute('lang', 'ar');
+      btnAr.classList.add('active');
+      btnEn.classList.remove('active');
+
+    }
+    try { localStorage.setItem('preferred_lang', lang); } catch (e) { /* localStorage unavailable -- just won't persist */ }
+  }
+
+  // English is the default for a first-time visitor -- only override to
+  // Arabic if that's what they explicitly chose last time.
+  try {
+    const savedLang = localStorage.getItem('preferred_lang');
+    if (savedLang === 'ar') setLang('ar');
+  } catch (e) { /* localStorage unavailable -- stays on the default */ }
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function copyText(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const isAr = !document.getElementById('body').classList.contains('en');
+      alert(isAr ? 'تم النسخ!' : 'Copied!');
+    });
+  }
+
+  function copyReferral() {
+    const text = document.getElementById('referral-link-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const isAr = !document.getElementById('body').classList.contains('en');
+      alert(isAr ? 'تم نسخ الرابط!' : 'Link copied!');
+    });
+  }
+</script>
+
+<script>
+  function resendVerification() {
+    // Get current user from Firebase auth
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js").then(({ getAuth, sendEmailVerification }) => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        sendEmailVerification(user).then(() => {
+          const isAr = !document.getElementById('body').classList.contains('en');
+          alert(isAr ? 'تم إرسال رابط التفعيل على بريدك الإلكتروني.' : 'Verification email sent. Please check your inbox.');
+        }).catch(() => {
+          const isAr = !document.getElementById('body').classList.contains('en');
+          alert(isAr ? 'حدث خطأ. حاول لاحقاً.' : 'Error sending email. Try again later.');
+        });
+      }
+    });
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, query, where, orderBy, limit, startAfter, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCgijCTp0ZKs9gmbZ9W-JAA7Z_R9dF6f3I",
+    authDomain: "harmonyfx-b92b1.firebaseapp.com",
+    projectId: "harmonyfx-b92b1",
+    storageBucket: "harmonyfx-b92b1.firebasestorage.app",
+    messagingSenderId: "1074001889938",
+    appId: "1:1074001889938:web:f61eda18136a4aaec8744b",
+    measurementId: "G-MPCV7VB5VN"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    // Load user data
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists()) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    let data = userDoc.data();
+
+    // Declared here (not lower down where they're conceptually grouped)
+    // because loadHistory() can be called from the active-status branch
+    // below before the script reaches their original declaration line --
+    // a let/const is inaccessible until its own declaration actually runs,
+    // even though the function referencing it is hoisted.
+    const HISTORY_PAGE_SIZE = 5;
+    let historyCursor = { deposit: null, withdraw: null };
+    let historyDone = { deposit: false, withdraw: false };
+    let historyBuffer = [];
+    let historyLiveDocs = { deposit: [], withdraw: [] };
+    let depositPage1Unsub = null, withdrawPage1Unsub = null;
+    // The live listeners always run (they're the notification source), but
+    // the visible list only ever renders once the client explicitly asks
+    // for it -- not on page load, not after submitting a new transaction.
+    let historyRevealed = false;
+
+    // Set name and email in nav — the email matters for clients who have
+    // more than one portal account, so they know which one they're in.
+    const firstName = data.fullname ? data.fullname.split(' ')[0] : '';
+    document.getElementById('nav-name').textContent = firstName;
+    document.getElementById('nav-email').textContent = '(' + user.email + ')';
+
+    // Hide loading, show content
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('portal-content').style.display = 'block';
+
+    // Require a verified email before showing any account status/KYC/MT5 data.
+    if (!user.emailVerified) {
+      document.getElementById('card-not-verified').style.display = 'block';
+      window.logout = async function() {
+        await signOut(auth);
+        window.location.href = 'login.html';
+      };
+      return;
+    }
+
+    // Show correct status card. Wrapped in a function (rather than run
+    // inline once) so the live listener further down can re-run it whenever
+    // the doc changes -- e.g. KYC gets approved or an MT5 account becomes
+    // ready -- without a manual page refresh.
+    function renderStatusCard() {
+    const status = data.status || 'pending_kyc';
+    const hasExistingAccounts = !!((data.mt5_accounts && data.mt5_accounts.length) || data.mt5_login);
+    const cards = ['pending-kyc','kyc-submitted','kyc-rejected','kyc-approved','mt5-requested','active'];
+    cards.forEach(c => {
+      const el = document.getElementById('card-' + c);
+      if (el) el.style.display = 'none';
+    });
+
+    if (status === 'pending_kyc' || status === 'pending') {
+      document.getElementById('card-pending-kyc').style.display = 'block';
+    } else if (status === 'kyc_submitted') {
+      document.getElementById('card-kyc-submitted').style.display = 'block';
+    } else if (status === 'kyc_rejected') {
+      document.getElementById('card-kyc-rejected').style.display = 'block';
+      document.getElementById('rejection-reason-text').textContent = data.rejection_reason || '';
+    } else if (status === 'kyc_approved') {
+      document.getElementById('card-kyc-approved').style.display = 'block';
+    } else if (status === 'mt5_requested' && !hasExistingAccounts) {
+      // First-ever request -- nothing else to show yet, so the full-page
+      // takeover is still the right call here.
+      document.getElementById('card-mt5-requested').style.display = 'block';
+    } else if (status === 'active' || status === 'mt5_requested') {
+      // Either genuinely active, or requesting an ADDITIONAL account while
+      // already active -- either way there are existing accounts worth
+      // keeping on screen, so this stays the active view with just a small
+      // inline notice instead of a full-page takeover.
+      document.getElementById('card-active').style.display = 'block';
+      document.getElementById('mt5-pending-inline-notice').style.display = status === 'mt5_requested' ? 'block' : 'none';
+      const mt5Accounts = (data.mt5_accounts && data.mt5_accounts.length)
+        ? data.mt5_accounts
+        : (data.mt5_login ? [{ login: data.mt5_login, server: data.mt5_server || 'Harmonic' }] : []);
+      document.getElementById('mt5-cards-container').innerHTML = mt5Accounts.map((acc, i) => `
+        <div class="mt5-card">
+          <div class="mt5-card-title lang-ar">بيانات حساب MT5${mt5Accounts.length > 1 ? ' #' + (i + 1) : ''}</div>
+          <div class="mt5-card-title lang-en">MT5 Account Details${mt5Accounts.length > 1 ? ' #' + (i + 1) : ''}</div>
+          <div class="mt5-fields">
+            <div class="mt5-field">
+              <div class="mt5-field-label lang-ar">رقم الحساب</div>
+              <div class="mt5-field-label lang-en">Login</div>
+              <div class="mt5-field-value">
+                <span id="mt5-login-${i}">${escapeHtml(acc.login) || '—'}</span>
+                <button class="copy-btn" onclick="copyText('mt5-login-${i}')">
+                  <span class="lang-ar">نسخ</span><span class="lang-en">Copy</span>
+                </button>
+              </div>
+            </div>
+            <div class="mt5-field">
+              <div class="mt5-field-label lang-ar">السيرفر</div>
+              <div class="mt5-field-label lang-en">Server</div>
+              <div class="mt5-field-value">
+                <span id="mt5-server-${i}">${escapeHtml(acc.server) || 'Harmonic'}</span>
+                <button class="copy-btn" onclick="copyText('mt5-server-${i}')">
+                  <span class="lang-ar">نسخ</span><span class="lang-en">Copy</span>
+                </button>
+              </div>
+            </div>
+            <div class="mt5-field">
+              <div class="mt5-field-label lang-ar">المنصة</div>
+              <div class="mt5-field-label lang-en">Platform</div>
+              <div class="mt5-field-value">MT5</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      // WhatsApp password-resend request, pre-filled so support can identify the client immediately
+      const waMessage = encodeURIComponent(
+        `Hi, I'd like to request my MT5 password be resent.\nName: ${data.fullname || ''}\nEmail: ${data.email || user.email}\nReferral code: ${data.referral_code || ''}`
+      );
+      document.getElementById('whatsapp-resend-link').href = `https://wa.me/96170906509?text=${waMessage}`;
+      // Referral link
+      const refCode = data.referral_code || '';
+      document.getElementById('referral-link-text').textContent = 'https://harmonyfx.me/signup.html?ref=' + refCode;
+      document.getElementById('referral-count').textContent = data.referral_count || 0;
+      // Up to 3 accounts total — hide the request button once at the cap,
+      // and also while a request is already pending (inline notice above
+      // covers that state instead).
+      document.getElementById('request-another-box').style.display = (status !== 'mt5_requested' && mt5Accounts.length < 3) ? 'block' : 'none';
+      // With more than one account, let them pick which one to fund instead
+      // of guessing — with only one, there's nothing to choose.
+      const fundingPicker = document.getElementById('funding-account-picker');
+      const fundingSelect = document.getElementById('funding-account-select');
+      if (mt5Accounts.length > 1) {
+        fundingSelect.innerHTML = mt5Accounts.map(acc => `<option value="${escapeHtml(acc.login)}">${escapeHtml(acc.login)}</option>`).join('');
+        fundingPicker.style.display = 'block';
+      } else {
+        fundingPicker.style.display = 'none';
+      }
+      loadHistory(true);
+    }
+    }
+    renderStatusCard();
+
+    // Request MT5 function — also used from the active view to request a
+    // 2nd/3rd account, not just the first one from kyc_approved.
+    window.requestMT5 = async function() {
+      const wasActive = data.status === 'active';
+      // Optimistic UI: re-render immediately with the new status instead of
+      // waiting for the round trip -- the live listener below reconciles
+      // once the write actually lands (harmless no-op re-render at that point).
+      data = { ...data, status: 'mt5_requested', mt5_requested_at: new Date() };
+      renderStatusCard();
+
+      await updateDoc(doc(db, 'users', user.uid), { status: 'mt5_requested', mt5_requested_at: serverTimestamp() });
+
+      // Notify the team, same as the KYC-submission notification. Sent
+      // through Valmuntra's existing EmailJS account/template on purpose --
+      // this is a staff-only internal alert (recipient is HarmonyFX's own
+      // inbox, never a client), so there's no brand-leak risk here the way
+      // there is for anything a client actually sees. Best-effort: a failed
+      // email shouldn't block the client's request from going through.
+      try {
+        await emailjs.send('service_0oshg5a', 'template_k00znup', {
+          to_email: 'support@harmonyfx.me',
+          reply_to: user.email,
+          subject: 'MT5 Account Requested — ' + (data.fullname || ''),
+          message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nPhone: ${data.phone || ''}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\n${wasActive ? 'Client is already active and has requested an additional MT5 account.' : 'Client is KYC-approved and has requested an MT5 account.'}`
+        });
+      } catch (emailErr) {
+        console.log('MT5 request notification failed:', emailErr);
+      }
+    };
+
+    // ── LIVE STATUS UPDATES ──
+    // A separate live listener on the client's own doc (independent of the
+    // one-time renderStatusCard() call above) so KYC approval / an MT5
+    // account becoming ready reaches the portal without a manual refresh --
+    // same idea as the deposit/withdrawal banners below, applied to the
+    // account status itself.
+    let lastKnownStatus = data.status || 'pending_kyc';
+    let lastKnownAccountCount = (data.mt5_accounts && data.mt5_accounts.length) ? data.mt5_accounts.length : (data.mt5_login ? 1 : 0);
+    onSnapshot(doc(db, 'users', user.uid), (snap) => {
+      if (!snap.exists()) return;
+      const newData = snap.data();
+      const newStatus = newData.status || 'pending_kyc';
+      const newAccountCount = (newData.mt5_accounts && newData.mt5_accounts.length) ? newData.mt5_accounts.length : (newData.mt5_login ? 1 : 0);
+
+      const becameActive = newStatus === 'active' && (lastKnownStatus !== 'active' || newAccountCount > lastKnownAccountCount);
+      const kycJustApproved = newStatus === 'kyc_approved' && lastKnownStatus === 'kyc_submitted';
+      const kycJustRejected = newStatus === 'kyc_rejected' && lastKnownStatus === 'kyc_submitted';
+
+      data = newData;
+      lastKnownStatus = newStatus;
+      lastKnownAccountCount = newAccountCount;
+      renderStatusCard();
+
+      if (becameActive) {
+        const latestLogin = escapeHtml(String((newData.mt5_accounts && newData.mt5_accounts.length ? newData.mt5_accounts[newData.mt5_accounts.length - 1].login : newData.mt5_login) || ''));
+        showStatusBanner('mt5ready-' + newAccountCount, 'success', `<span class="lang-ar">حسابك على MT5 رقم ${latestLogin} جاهز الآن!</span><span class="lang-en">Your MT5 account ${latestLogin} is ready!</span>`);
+      } else if (kycJustApproved) {
+        showStatusBanner('kycapproved', 'success', `<span class="lang-ar">تم التحقق من هويتك بنجاح!</span><span class="lang-en">Your identity has been verified!</span>`);
+      } else if (kycJustRejected) {
+        showStatusBanner('kycrejected', 'error', `<span class="lang-ar">تم رفض التحقق من الهوية. يرجى مراجعة السبب أدناه.</span><span class="lang-en">Your identity verification was rejected — please check the reason below.</span>`);
+      }
+    });
+
+    // ── FUND & WITHDRAW ──
+    function getSelectedFundingAccount() {
+      const accounts = (data.mt5_accounts && data.mt5_accounts.length)
+        ? data.mt5_accounts
+        : (data.mt5_login ? [{ login: data.mt5_login }] : []);
+      const fundingSelect = document.getElementById('funding-account-select');
+      return accounts.length > 1 && fundingSelect && fundingSelect.value
+        ? fundingSelect.value
+        : (accounts[0] ? accounts[0].login : null);
+    }
+
+    // USDT deposits are still a WhatsApp hand-off for now -- only Whish
+    // Money deposits go through the full receipt-review flow below.
+    window.requestFundingWhatsApp = function(method) {
+      const selectedLogin = getSelectedFundingAccount() || '—';
+      const message = `Hi, I'd like to fund my MT5 account.\nName: ${data.fullname || ''}\nMT5 Login: ${selectedLogin}\nReferral Code: ${data.referral_code || ''}\nFunding Method: ${method}`;
+      window.open(`https://wa.me/96170906509?text=${encodeURIComponent(message)}`, '_blank');
+    };
+
+    let whishPhoneNumber = '';
+    try {
+      const settingsSnap = await getDoc(doc(db, 'settings', 'whish_money'));
+      whishPhoneNumber = settingsSnap.exists() ? (settingsSnap.data().phone_number || '') : '';
+    } catch (e) { console.log('Could not load Whish Money settings:', e); }
+
+    window.showFundingTab = function(tab) {
+      document.getElementById('tab-btn-deposit').classList.toggle('active', tab === 'deposit');
+      document.getElementById('tab-btn-withdraw').classList.toggle('active', tab === 'withdraw');
+      document.getElementById('tab-deposit').style.display = tab === 'deposit' ? 'block' : 'none';
+      document.getElementById('tab-withdraw').style.display = tab === 'withdraw' ? 'block' : 'none';
+    };
+
+    window.selectDepositMethod = function(method) {
+      document.getElementById('whish-deposit-form').style.display = method === 'Whish Money' ? 'block' : 'none';
+      document.getElementById('usdt-deposit-note').style.display = method === 'USDT' ? 'block' : 'none';
+      if (method === 'Whish Money') {
+        document.getElementById('whish-phone-display').textContent = whishPhoneNumber || '—';
+      }
+    };
+
+    window.submitDeposit = async function() {
+      const errEl = document.getElementById('deposit-error');
+      errEl.style.display = 'none';
+      const isAr = !document.getElementById('body').classList.contains('en');
+
+      const amount = parseFloat(document.getElementById('deposit-amount').value);
+      const fileInput = document.getElementById('deposit-receipt');
+      const file = fileInput.files[0];
+      const selectedLogin = getSelectedFundingAccount();
+
+      if (!amount || amount <= 0) {
+        errEl.textContent = isAr ? 'الرجاء إدخال مبلغ صحيح.' : 'Please enter a valid amount.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (!file) {
+        errEl.textContent = isAr ? 'الرجاء رفع صورة الإيصال.' : 'Please upload the receipt screenshot.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('deposit-submit-btn');
+      const spinner = document.getElementById('deposit-spinner');
+      btn.disabled = true;
+      spinner.style.display = 'inline-block';
+
+      try {
+        const fileRef = ref(storage, `funding_receipts/${user.uid}/${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        const receiptUrl = await getDownloadURL(fileRef);
+
+        await addDoc(collection(db, 'funding_requests'), {
+          uid: user.uid,
+          fullname: data.fullname || '',
+          email: user.email,
+          mt5_login: selectedLogin,
+          method: 'Whish Money',
+          claimed_amount: amount,
+          approved_amount: null,
+          receipt_url: receiptUrl,
+          status: 'pending',
+          rejection_reason: null,
+          resolved_by: null,
+          resolved_at: null,
+          created_at: serverTimestamp()
+        });
+
+        try {
+          await emailjs.send('service_0oshg5a', 'template_k00znup', {
+            to_email: 'support@harmonyfx.me',
+            reply_to: user.email,
+            subject: 'New Deposit Request — ' + (data.fullname || ''),
+            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}`
+          });
+        } catch (emailErr) { console.log('Deposit notification failed:', emailErr); }
+
+        document.getElementById('deposit-amount').value = '';
+        fileInput.value = '';
+        document.getElementById('whish-deposit-form').style.display = 'none';
+        showQuickBanner('<span class="lang-ar">تم إرسال طلب الإيداع! سنراجعه قريباً.</span><span class="lang-en">Deposit request submitted! We will review it shortly.</span>', 'success');
+      } catch (e) {
+        console.error(e);
+        errEl.textContent = isAr ? 'حدث خطأ. حاول مجدداً.' : 'An error occurred. Please try again.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+      }
+    };
+
+    window.onWithdrawMethodChange = function() {
+      const method = document.getElementById('withdraw-method').value;
+      document.getElementById('withdraw-whish-fields').style.display = method === 'Whish Money' ? 'block' : 'none';
+      document.getElementById('withdraw-usdt-fields').style.display = method === 'USDT' ? 'block' : 'none';
+    };
+
+    window.submitWithdrawal = async function() {
+      const errEl = document.getElementById('withdraw-error');
+      errEl.style.display = 'none';
+      const isAr = !document.getElementById('body').classList.contains('en');
+
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const method = document.getElementById('withdraw-method').value;
+      const selectedLogin = getSelectedFundingAccount();
+
+      if (!amount || amount <= 0) {
+        errEl.textContent = isAr ? 'الرجاء إدخال مبلغ صحيح.' : 'Please enter a valid amount.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      let destination = {};
+      if (method === 'Whish Money') {
+        const phone = document.getElementById('withdraw-phone').value.trim();
+        if (!phone) {
+          errEl.textContent = isAr ? 'الرجاء إدخال رقم الهاتف.' : 'Please enter the phone number.';
+          errEl.style.display = 'block';
+          return;
+        }
+        destination = { phone };
+      } else {
+        const wallet = document.getElementById('withdraw-wallet').value.trim();
+        const network = document.getElementById('withdraw-network').value;
+        if (!wallet) {
+          errEl.textContent = isAr ? 'الرجاء إدخال عنوان المحفظة.' : 'Please enter the wallet address.';
+          errEl.style.display = 'block';
+          return;
+        }
+        destination = { wallet, network };
+      }
+
+      const btn = document.getElementById('withdraw-submit-btn');
+      const spinner = document.getElementById('withdraw-spinner');
+      btn.disabled = true;
+      spinner.style.display = 'inline-block';
+
+      try {
+        await addDoc(collection(db, 'withdrawal_requests'), {
+          uid: user.uid,
+          fullname: data.fullname || '',
+          email: user.email,
+          mt5_login: selectedLogin,
+          method,
+          amount,
+          destination,
+          completion_receipt_url: null,
+          status: 'pending',
+          rejection_reason: null,
+          resolved_by: null,
+          resolved_at: null,
+          created_at: serverTimestamp()
+        });
+
+        try {
+          await emailjs.send('service_0oshg5a', 'template_k00znup', {
+            to_email: 'support@harmonyfx.me',
+            reply_to: user.email,
+            subject: 'New Withdrawal Request — ' + (data.fullname || ''),
+            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\nMethod: ${method}\nDestination: ${JSON.stringify(destination)}`
+          });
+        } catch (emailErr) { console.log('Withdrawal notification failed:', emailErr); }
+
+        document.getElementById('withdraw-amount').value = '';
+        document.getElementById('withdraw-phone').value = '';
+        document.getElementById('withdraw-wallet').value = '';
+        showQuickBanner('<span class="lang-ar">تم إرسال طلب السحب! سنعالجه قريباً.</span><span class="lang-en">Withdrawal request submitted! We will process it shortly.</span>', 'success');
+      } catch (e) {
+        console.error(e);
+        errEl.textContent = isAr ? 'حدث خطأ. حاول مجدداً.' : 'An error occurred. Please try again.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+      }
+    };
+
+    // ── TRANSACTION HISTORY -- deposits and withdrawals merged into one
+    // time-sorted list (whichever happened most recently shows first,
+    // regardless of type). Page 1 for each collection is its own live
+    // listener; since the true merged top-10 is always contained within
+    // the top-10 of each individual collection, fetching 10 from each and
+    // merging client-side is sufficient -- no separate "top 10 overall"
+    // query is possible across two collections anyway. Receipts are shown
+    // as a link rather than loaded inline, so a long history stays fast.
+    // (historyLiveDocs itself is declared up top with the other history
+    // state, for the same TDZ reason explained there.)
+
+    // A soft ascending major-third chime (C6, E6, G6) with a gentle
+    // attack/release envelope -- a pleasant "good news" tone rather than
+    // the staff panel's urgent double-beep, which is meant to grab
+    // attention for an action-needed alert, not fit a client-facing update.
+    function playNotifySound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [1046.5, 1318.5, 1568].forEach((freq, i) => {
+          setTimeout(() => {
+            const o = ctx.createOscillator(), g = ctx.createGain();
+            o.type = 'sine';
+            o.connect(g); g.connect(ctx.destination);
+            o.frequency.value = freq;
+            const t = ctx.currentTime;
+            g.gain.setValueAtTime(0.0001, t);
+            g.gain.exponentialRampToValueAtTime(0.1, t + 0.03);
+            g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+            o.start(t); o.stop(t + 0.35);
+          }, i * 90);
+        });
+      } catch (e) { /* audio not available -- the banner still shows */ }
+    }
+
+    // ── DISMISSIBLE NOTIFICATION BANNERS ──
+    // Dismiss state lives in localStorage (per browser, not per account) --
+    // fine for a convenience banner, not something that needs to survive a
+    // device switch. The underlying status itself is still always correct
+    // in Firestore/the history list regardless of whether a banner was seen.
+    function getDismissedBannerIds() {
+      try { return JSON.parse(localStorage.getItem('dismissed_txn_banners') || '[]'); }
+      catch (e) { return []; }
+    }
+    function markBannerDismissed(id) {
+      try {
+        const ids = getDismissedBannerIds();
+        if (!ids.includes(id)) ids.push(id);
+        localStorage.setItem('dismissed_txn_banners', JSON.stringify(ids));
+      } catch (e) { /* localStorage unavailable -- banner just won't persist as dismissed */ }
+    }
+    window.dismissTxnBanner = function(id) {
+      markBannerDismissed(id);
+      const el = document.getElementById(`txn-banner-${id}`);
+      if (el) el.remove();
+    };
+
+    // A one-off, non-blocking confirmation (e.g. "request submitted") --
+    // unlike alert(), it never sits there demanding a click before the
+    // client can do anything else.
+    let quickBannerCounter = 0;
+    function showQuickBanner(html, kind) {
+      const id = `quick-${Date.now()}-${quickBannerCounter++}`;
+      document.getElementById('txn-banners').insertAdjacentHTML('beforeend', `
+        <div class="txn-banner ${kind}" id="txn-banner-${id}">
+          <span>${html}</span>
+          <button class="txn-banner-close" onclick="dismissTxnBanner('${id}')">×</button>
+        </div>
+      `);
+      setTimeout(() => window.dismissTxnBanner(id), 8000);
+    }
+
+    // Account-status banners (KYC approved/rejected, MT5 account ready) --
+    // same dismiss-tracking and styling as the transaction banners above,
+    // just keyed by a synthetic id (a status/account-count milestone)
+    // instead of a Firestore doc id.
+    function showStatusBanner(id, kind, html) {
+      if (getDismissedBannerIds().includes(id)) return;
+      if (document.getElementById(`txn-banner-${id}`)) return;
+      document.getElementById('txn-banners').insertAdjacentHTML('beforeend', `
+        <div class="txn-banner ${kind}" id="txn-banner-${id}">
+          <span>${html}</span>
+          <button class="txn-banner-close" onclick="dismissTxnBanner('${id}')">×</button>
+        </div>
+      `);
+      setTimeout(() => window.dismissTxnBanner(id), 30000);
+      playNotifySound();
+    }
+
+    // Both language variants are always emitted together (lang-ar/lang-en
+    // spans, same convention as the rest of this page) instead of picking
+    // one at render time -- so toggling EN/AR updates every banner and
+    // status label already on screen instantly via CSS, with no re-render.
+    function bannerMessageFor(type, r) {
+      if (type === 'deposit') {
+        if (r.status === 'deposited') {
+          const amt = r.approved_amount != null ? r.approved_amount : r.claimed_amount;
+          return { kind: 'success', html: `<span class="lang-ar">تم تأكيد إيداعك بمبلغ $${amt}.</span><span class="lang-en">Your deposit of $${amt} has been confirmed.</span>` };
+        }
+        if (r.status === 'rejected') {
+          const reason = escapeHtml(r.rejection_reason || '');
+          return { kind: 'error', html: `<span class="lang-ar">تم رفض طلب الإيداع الخاص بك. السبب: ${reason}</span><span class="lang-en">Your deposit request was rejected. Reason: ${reason}</span>` };
+        }
+      } else {
+        if (r.status === 'completed') {
+          return { kind: 'success', html: `<span class="lang-ar">تم إتمام عملية سحبك بمبلغ $${r.amount}.</span><span class="lang-en">Your withdrawal of $${r.amount} has been completed.</span>` };
+        }
+        if (r.status === 'rejected') {
+          const reason = escapeHtml(r.rejection_reason || '');
+          return { kind: 'error', html: `<span class="lang-ar">تم رفض طلب السحب الخاص بك. السبب: ${reason}</span><span class="lang-en">Your withdrawal request was rejected. Reason: ${reason}</span>` };
+        }
+      }
+      return null;
+    }
+
+    let hasReceivedFirstBannerSnapshot = { deposit: false, withdraw: false };
+    function updateTxnBanners(type, docs) {
+      const dismissed = getDismissedBannerIds();
+      let playedSound = false;
+      docs.forEach(d => {
+        const r = d.data();
+        const id = `${type}-${d.id}`;
+        if (dismissed.includes(id)) return;
+        const msg = bannerMessageFor(type, r);
+        if (!msg) return;
+        if (document.getElementById(`txn-banner-${id}`)) return;
+        document.getElementById('txn-banners').insertAdjacentHTML('beforeend', `
+          <div class="txn-banner ${msg.kind}" id="txn-banner-${id}">
+            <span>${msg.html}</span>
+            <button class="txn-banner-close" onclick="dismissTxnBanner('${id}')">×</button>
+          </div>
+        `);
+        // Auto-dismiss after 30s -- otherwise a banner from days ago (e.g.
+        // opening the portal on a new device, which has no record of what
+        // was already dismissed) sits there indefinitely.
+        setTimeout(() => window.dismissTxnBanner(id), 30000);
+        // Only play a sound for something that resolved while the client is
+        // actually here -- not for old undismissed banners reappearing on
+        // the very first load of this listener.
+        if (hasReceivedFirstBannerSnapshot[type] && !playedSound) { playNotifySound(); playedSound = true; }
+      });
+      hasReceivedFirstBannerSnapshot[type] = true;
+    }
+
+    function formatHistoryDate(ts) {
+      if (!ts || !ts.seconds) return '';
+      return new Date(ts.seconds * 1000).toLocaleString('en-GB', { timeZone: 'Asia/Beirut', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function historyStatusBadge(kind, status) {
+      const maps = {
+        deposit: {
+          pending: { cls: 'pending', ar: 'قيد المراجعة', en: 'Pending Review' },
+          sent_to_googlecell: { cls: 'processing', ar: 'قيد التأكيد', en: 'Confirming' },
+          deposited: { cls: 'done', ar: 'تم الإيداع', en: 'Deposited' },
+          rejected: { cls: 'rejected', ar: 'مرفوض', en: 'Rejected' },
+        },
+        withdraw: {
+          pending: { cls: 'pending', ar: 'قيد المراجعة', en: 'Pending Review' },
+          balance_deducted: { cls: 'processing', ar: 'تم خصم المبلغ من الحساب — قيد المعالجة', en: 'Withdrawn from account — processing' },
+          sent_to_googlecell: { cls: 'processing', ar: 'قيد التحويل', en: 'Transferring' },
+          completed: { cls: 'done', ar: 'مكتمل', en: 'Completed' },
+          rejected: { cls: 'rejected', ar: 'مرفوض', en: 'Rejected' },
+        },
+      };
+      const s = maps[kind][status] || maps[kind].pending;
+      return `<span class="history-status ${s.cls}"><span class="lang-ar">${s.ar}</span><span class="lang-en">${s.en}</span></span>`;
+    }
+
+    function renderHistoryRow(r) {
+      const type = r._type;
+      const dateStr = formatHistoryDate(r.resolved_at || r.created_at);
+      if (type === 'deposit') {
+        const amountLine = (r.approved_amount != null && r.approved_amount !== r.claimed_amount)
+          ? `$${r.claimed_amount} → $${r.approved_amount}`
+          : `$${r.claimed_amount}`;
+        return `
+          <div class="history-row">
+            <div>
+              <div class="history-meta">${amountLine} — ${escapeHtml(r.method || 'Whish Money')} <span class="lang-ar">(إيداع)</span><span class="lang-en">(Deposit)</span></div>
+              <div class="history-sub">MT5 ${escapeHtml(r.mt5_login || '—')} · ${dateStr}${r.rejection_reason ? ' — ' + escapeHtml(r.rejection_reason) : ''}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              ${historyStatusBadge('deposit', r.status)}
+              ${r.receipt_url ? `<a class="history-link" href="${escapeHtml(r.receipt_url)}" target="_blank" rel="noopener"><span class="lang-ar">عرض الإيصال</span><span class="lang-en">View Receipt</span></a>` : ''}
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="history-row">
+          <div>
+            <div class="history-meta">$${r.amount} — ${escapeHtml(r.method || '')} <span class="lang-ar">(سحب)</span><span class="lang-en">(Withdrawal)</span></div>
+            <div class="history-sub">MT5 ${escapeHtml(r.mt5_login || '—')} · ${dateStr}${r.rejection_reason ? ' — ' + escapeHtml(r.rejection_reason) : ''}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            ${historyStatusBadge('withdraw', r.status)}
+            ${r.completion_receipt_url ? `<a class="history-link" href="${escapeHtml(r.completion_receipt_url)}" target="_blank" rel="noopener"><span class="lang-ar">عرض الإيصال</span><span class="lang-en">View Receipt</span></a>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function renderMergedPage1() {
+      if (!historyRevealed) return;
+      const merged = [
+        ...historyLiveDocs.deposit.map(r => ({ ...r, _type: 'deposit' })),
+        ...historyLiveDocs.withdraw.map(r => ({ ...r, _type: 'withdraw' })),
+      ]
+        .sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0))
+        .slice(0, HISTORY_PAGE_SIZE);
+
+      document.getElementById('txn-history-page1').innerHTML = merged.map(renderHistoryRow).join('');
+      const hasAnyMore = document.getElementById('txn-history-more-pages').innerHTML;
+      document.getElementById('txn-history-empty').style.display = (merged.length === 0 && !hasAnyMore) ? 'block' : 'none';
+    }
+
+    window.revealTxnHistory = function() {
+      historyRevealed = true;
+      document.getElementById('txn-history-reveal-btn').style.display = 'none';
+      document.getElementById('txn-history-content').style.display = 'block';
+      renderMergedPage1();
+    };
+
+    // Only page 1 is ever a live listener (one per collection, merged) --
+    // it doubles as the notification source. Older pages are one-time
+    // fetches via loadMoreHistory, since resolved history from further
+    // back isn't going to change again.
+    function loadHistory(reset) {
+      if (!reset) return;
+      document.getElementById('txn-history-more-pages').innerHTML = '';
+      historyCursor = { deposit: null, withdraw: null };
+      historyDone = { deposit: false, withdraw: false };
+      historyBuffer = [];
+      if (depositPage1Unsub) depositPage1Unsub();
+      if (withdrawPage1Unsub) withdrawPage1Unsub();
+
+      const dq = query(collection(db, 'funding_requests'), where('uid', '==', user.uid), orderBy('created_at', 'desc'), limit(HISTORY_PAGE_SIZE));
+      depositPage1Unsub = onSnapshot(dq, (snap) => {
+        historyLiveDocs.deposit = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const lastDoc = snap.docs[snap.docs.length - 1];
+        if (lastDoc) historyCursor.deposit = lastDoc;
+        historyDone.deposit = snap.size < HISTORY_PAGE_SIZE;
+        renderMergedPage1();
+        updateTxnBanners('deposit', snap.docs);
+        updateLoadMoreVisibility();
+      }, (err) => console.error('Failed to load deposit history:', err));
+
+      const wq = query(collection(db, 'withdrawal_requests'), where('uid', '==', user.uid), orderBy('created_at', 'desc'), limit(HISTORY_PAGE_SIZE));
+      withdrawPage1Unsub = onSnapshot(wq, (snap) => {
+        historyLiveDocs.withdraw = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const lastDoc = snap.docs[snap.docs.length - 1];
+        if (lastDoc) historyCursor.withdraw = lastDoc;
+        historyDone.withdraw = snap.size < HISTORY_PAGE_SIZE;
+        renderMergedPage1();
+        updateTxnBanners('withdraw', snap.docs);
+        updateLoadMoreVisibility();
+      }, (err) => console.error('Failed to load withdrawal history:', err));
+    }
+
+    function updateLoadMoreVisibility() {
+      const stillMore = historyBuffer.length > 0 || !historyDone.deposit || !historyDone.withdraw;
+      document.getElementById('txn-history-more').style.display = stillMore ? 'block' : 'none';
+    }
+
+    async function fetchHistoryPageForType(type) {
+      if (historyDone[type]) return [];
+      const collectionName = type === 'deposit' ? 'funding_requests' : 'withdrawal_requests';
+      const cursor = historyCursor[type];
+      const base = [collection(db, collectionName), where('uid', '==', user.uid), orderBy('created_at', 'desc')];
+      const q = cursor ? query(...base, startAfter(cursor), limit(HISTORY_PAGE_SIZE)) : query(...base, limit(HISTORY_PAGE_SIZE));
+      let snap;
+      try {
+        snap = await getDocs(q);
+      } catch (e) {
+        console.error(`Failed to load more ${type} history:`, e);
+        historyDone[type] = true;
+        return [];
+      }
+      const docs = snap.docs.map(d => ({ id: d.id, ...d.data(), _type: type }));
+      const lastDoc = snap.docs[snap.docs.length - 1];
+      if (lastDoc) historyCursor[type] = lastDoc;
+      if (snap.size < HISTORY_PAGE_SIZE) historyDone[type] = true;
+      return docs;
+    }
+
+    window.loadMoreHistory = async function() {
+      if (historyBuffer.length < HISTORY_PAGE_SIZE) {
+        const types = ['deposit', 'withdraw'].filter(t => !historyDone[t]);
+        const fetches = await Promise.all(types.map(fetchHistoryPageForType));
+        fetches.forEach(docs => historyBuffer.push(...docs));
+        historyBuffer.sort((a, b) => (b.created_at?.seconds || 0) - (a.created_at?.seconds || 0));
+      }
+
+      const pageItems = historyBuffer.splice(0, HISTORY_PAGE_SIZE);
+      document.getElementById('txn-history-more-pages').insertAdjacentHTML('beforeend', pageItems.map(renderHistoryRow).join(''));
+      updateLoadMoreVisibility();
+    };
+
+    // Logout
+    window.logout = async function() {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    };
+  });
+</script>
+
+</body>
+</html>

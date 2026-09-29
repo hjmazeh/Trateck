@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HarmonyFX — تسجيل الدخول</title>
+<link rel="icon" href="harmony-logo-01.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Arabic:wght@400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:      #0D1F2D;
+    --navy-lt:   #14293A;
+    --teal:      #1A3A4A;
+    --gold:      #C9A84C;
+    --gold-lt:   #D9BF71;
+    --cream:     #F5F0E8;
+    --steel:     #6B8F9E;
+    --line:      rgba(245,240,232,0.09);
+    --err:       #E8837A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+  }
+  body.en { font-family: 'Inter', sans-serif; direction: ltr; text-align: left; }
+
+  .lang-ar { display: block; }
+  .lang-en { display: none; }
+  span.lang-ar { display: inline; }
+  span.lang-en { display: none; }
+  label.lang-ar { display: block; }
+  label.lang-en { display: none; }
+  body.en .lang-ar { display: none; }
+  body.en .lang-en { display: block; }
+  body.en span.lang-ar { display: none; }
+  body.en span.lang-en { display: inline; }
+  body.en label.lang-ar { display: none; }
+  body.en label.lang-en { display: block; }
+
+  /* ── NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+    border-bottom: 1px solid var(--line);
+    background: var(--navy);
+  }
+  .nav-logo img { height: 48px; width: auto; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .lang-toggle {
+    display: flex;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .lang-btn {
+    padding: 5px 13px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--steel);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--gold); color: var(--navy); }
+  .nav-back {
+    font-size: 13px;
+    color: var(--steel);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--cream); }
+
+  /* ── MAIN */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  main::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-box {
+    background: var(--navy-lt);
+    border: 1px solid var(--line);
+    width: 100%;
+    max-width: 440px;
+    padding: 48px 44px;
+    position: relative;
+    z-index: 1;
+  }
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 100%; height: 3px;
+    background: var(--gold);
+  }
+  body.en .login-box::before { right: auto; left: 0; }
+
+  .login-title {
+    font-family: 'Noto Serif Arabic', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  body.en .login-title { font-family: 'Playfair Display', serif; font-weight: 500; }
+
+  .login-sub {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--steel);
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--steel);
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+  }
+  .form-input {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--teal);
+    border: 1px solid var(--line);
+    color: var(--cream);
+    font-size: 15px;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  body.en .form-input { font-family: 'Inter', sans-serif; }
+  .form-input::placeholder { color: var(--steel); opacity: 0.7; }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input.error { border-color: var(--err); }
+
+  .form-error {
+    font-size: 12px;
+    color: var(--err);
+    margin-top: 6px;
+    display: none;
+  }
+  .form-error.show { display: block; }
+
+  /* phone with country code */
+  .phone-wrap { display: flex; gap: 8px; }
+  body:not(.en) .phone-wrap { flex-direction: row-reverse; }
+  .phone-code {
+    width: 80px;
+    flex-shrink: 0;
+    padding: 13px 12px;
+    background: var(--teal);
+    border: 1px solid var(--line);
+    color: var(--cream);
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    text-align: center;
+  }
+  .phone-input { flex: 1; }
+
+  .forgot-link {
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    color: var(--steel);
+    text-decoration: none;
+    margin-top: 6px;
+    transition: color 0.2s;
+  }
+  body:not(.en) .forgot-link { text-align: right; }
+  .forgot-link:hover { color: var(--gold-lt); }
+
+  .global-error {
+    background: rgba(232,131,122,0.1);
+    border: 1px solid rgba(232,131,122,0.3);
+    color: var(--err);
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: none;
+    line-height: 1.6;
+  }
+  .global-error.show { display: block; }
+
+  .form-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s, opacity 0.2s;
+    letter-spacing: 0.3px;
+  }
+  body.en .form-submit { font-family: 'Inter', sans-serif; }
+  .form-submit:hover { background: var(--gold-lt); }
+  .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(13,31,45,0.3);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .spinner.show { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .form-signup {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--steel);
+  }
+  .form-signup a { color: var(--gold-lt); text-decoration: none; }
+  .form-signup a:hover { text-decoration: underline; }
+
+  /* ── DIVIDER + GOOGLE SIGN-IN */
+  .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .divider span { font-size: 11px; color: var(--steel); font-family: 'Inter', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  .google-btn {
+    width: 100%;
+    padding: 13px;
+    background: #fff;
+    color: #3c4043;
+    border: 1px solid var(--line);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: box-shadow 0.2s, opacity 0.2s;
+  }
+  .google-btn:hover { box-shadow: 0 1px 6px rgba(0,0,0,0.3); }
+  .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .google-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ── GOOGLE PROFILE COMPLETION (new Google sign-ins need a phone number) */
+  .google-profile-box { display: none; }
+  .google-profile-box.show { display: block; }
+
+  /* reset password box */
+  .reset-box { display: none; }
+  .reset-box.show { display: block; }
+  .form-wrap { display: block; }
+  .form-wrap.hide { display: none; }
+
+  .success-note {
+    background: rgba(111,191,143,0.1);
+    border: 1px solid rgba(111,191,143,0.3);
+    color: #9AD9B4;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: none;
+    line-height: 1.6;
+  }
+  .success-note.show { display: block; }
+
+  .warning-note {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-lt);
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: none;
+    line-height: 1.7;
+  }
+  .warning-note.show { display: block; }
+  .warning-note button {
+    background: none;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 10px;
+    font-family: inherit;
+  }
+  .warning-note button:hover { background: rgba(201,168,76,0.15); }
+
+  footer {
+    padding: 20px 60px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 12px;
+    color: var(--steel);
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .login-box { padding: 32px 24px; }
+    footer { padding: 20px 24px; }
+  }
+
+  .whatsapp-float {
+    position: fixed; bottom: 20px; right: 20px; z-index: 200;
+    display: flex; align-items: center; gap: 8px;
+    background: #25D366; color: #fff; text-decoration: none;
+    padding: 10px 16px; border-radius: 30px;
+    font-size: 13px; font-weight: 700; font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: transform 0.15s;
+  }
+  .whatsapp-float:hover { transform: scale(1.05); }
+  .whatsapp-float svg { width: 20px; height: 20px; flex-shrink: 0; }
+  @media (max-width: 600px) {
+    .whatsapp-float { padding: 8px 12px; font-size: 12px; bottom: 14px; right: 14px; }
+    .whatsapp-float svg { width: 18px; height: 18px; }
+  }
+</style>
+</head>
+<body id="body" class="en">
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="harmony-logo-02.png" alt="HarmonyFX">
+  </a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="index.html" class="nav-back">
+      <span class="lang-ar">→ الرئيسية</span>
+      <span class="lang-en">← Home</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="login-box">
+
+    <!-- Login Form -->
+    <div class="form-wrap" id="form-wrap">
+      <h1 class="login-title">
+        <span class="lang-ar">تسجيل الدخول</span>
+        <span class="lang-en">Sign In</span>
+      </h1>
+      <p class="login-sub">
+        <span class="lang-ar">أدخل بياناتك للوصول إلى بوابتك</span>
+        <span class="lang-en">Enter your credentials to access your portal</span>
+      </p>
+
+      <div class="global-error" id="global-error"></div>
+      <div class="warning-note" id="unverified-notice">
+        <span class="lang-ar">لم يتم تفعيل بريدك الإلكتروني بعد. يرجى الضغط على رابط التفعيل الذي أرسلناه إلى بريدك عند التسجيل.</span>
+        <span class="lang-en">Your email hasn't been verified yet. Please click the verification link we sent you when you signed up.</span>
+        <br>
+        <button type="button" onclick="resendVerifyFromLogin()">
+          <span class="lang-ar">إعادة إرسال رابط التفعيل</span>
+          <span class="lang-en">Resend verification email</span>
+        </button>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label lang-ar">البريد الإلكتروني</label>
+          <label class="form-label lang-en">Email Address</label>
+          <input type="email" class="form-input" id="email" placeholder="example@email.com" autocomplete="email" dir="ltr">
+          <div class="form-error" id="email-error">
+            <span class="lang-ar">الرجاء إدخال بريد إلكتروني صحيح</span>
+            <span class="lang-en">Please enter a valid email address</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label lang-ar">كلمة المرور</label>
+          <label class="form-label lang-en">Password</label>
+          <input type="password" class="form-input" id="password" placeholder="••••••••" autocomplete="current-password" dir="ltr">
+          <a href="#" class="forgot-link" id="forgot-link" onclick="showReset(event)">
+            <span class="lang-ar">نسيت كلمة المرور؟</span>
+            <span class="lang-en">Forgot password?</span>
+          </a>
+          <div class="form-error" id="password-error">
+            <span class="lang-ar">الرجاء إدخال كلمة المرور</span>
+            <span class="lang-en">Please enter your password</span>
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit" id="submit-btn">
+          <span class="lang-ar">دخول</span>
+          <span class="lang-en">Sign In</span>
+          <span class="spinner" id="spinner"></span>
+        </button>
+
+        <div class="divider"><span><span class="lang-ar">أو</span><span class="lang-en">OR</span></span></div>
+
+        <button type="button" class="google-btn" id="google-btn" onclick="startGoogleLogin()">
+          <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+          <span class="lang-ar">تسجيل الدخول عبر Google</span>
+          <span class="lang-en">Continue with Google</span>
+          <span class="spinner" id="google-spinner"></span>
+        </button>
+
+        <p class="form-signup">
+          <span class="lang-ar">ليس لديك حساب؟ <a href="signup.html">إنشاء حساب جديد</a></span>
+          <span class="lang-en">Don't have an account? <a href="signup.html">Create one</a></span>
+        </p>
+      </form>
+    </div>
+
+    <!-- Google sign-in: one more step to collect a phone number for brand-new accounts -->
+    <div class="google-profile-box" id="google-profile-box">
+      <h1 class="login-title">
+        <span class="lang-ar">خطوة أخيرة</span>
+        <span class="lang-en">One More Step</span>
+      </h1>
+      <p class="login-sub">
+        <span class="lang-ar">أدخل رقم هاتفك لإكمال إنشاء حسابك</span>
+        <span class="lang-en">Enter your phone number to finish setting up your account</span>
+      </p>
+
+      <div class="global-error" id="google-profile-error"></div>
+
+      <div class="form-group">
+        <label class="form-label lang-ar">رقم الهاتف</label>
+        <label class="form-label lang-en">Phone Number</label>
+        <div class="phone-wrap">
+          <input type="text" class="form-input phone-code" id="g-phone-code" value="+961" placeholder="+961">
+          <input type="tel" class="form-input phone-input" id="g-phone" placeholder="7XXXXXXX" autocomplete="tel">
+        </div>
+        <div class="form-error" id="g-phone-error">
+          <span class="lang-ar">الرجاء إدخال رقم هاتف صحيح</span>
+          <span class="lang-en">Please enter a valid phone number</span>
+        </div>
+      </div>
+
+      <button type="button" class="form-submit" id="google-profile-btn" onclick="completeGoogleProfile()">
+        <span class="lang-ar">متابعة</span>
+        <span class="lang-en">Continue</span>
+        <span class="spinner" id="google-profile-spinner"></span>
+      </button>
+    </div>
+
+    <!-- Reset Password -->
+    <div class="reset-box" id="reset-box">
+      <h1 class="login-title">
+        <span class="lang-ar">استعادة كلمة المرور</span>
+        <span class="lang-en">Reset Password</span>
+      </h1>
+      <p class="login-sub">
+        <span class="lang-ar">أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين</span>
+        <span class="lang-en">Enter your email and we'll send you a reset link</span>
+      </p>
+
+      <div class="global-error" id="reset-error"></div>
+      <div class="success-note" id="reset-success">
+        <span class="lang-ar">تم إرسال رابط إعادة التعيين على بريدك الإلكتروني</span>
+        <span class="lang-en">Reset link sent to your email</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label lang-ar">البريد الإلكتروني</label>
+        <label class="form-label lang-en">Email Address</label>
+        <input type="email" class="form-input" id="reset-email" placeholder="example@email.com" dir="ltr">
+      </div>
+
+      <button class="form-submit" id="reset-btn" onclick="sendReset()">
+        <span class="lang-ar">إرسال الرابط</span>
+        <span class="lang-en">Send Reset Link</span>
+        <span class="spinner" id="reset-spinner"></span>
+      </button>
+
+      <p class="form-signup" style="margin-top:16px;">
+        <a href="#" onclick="showLogin(event)">
+          <span class="lang-ar">→ العودة لتسجيل الدخول</span>
+          <span class="lang-en">← Back to Sign In</span>
+        </a>
+      </p>
+    </div>
+
+  </div>
+</main>
+
+<footer>© 2026 HarmonyFX Trading</footer>
+
+<a href="https://wa.me/96170906509" target="_blank" rel="noopener" class="whatsapp-float" aria-label="Contact us on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16.001 3C9.101 3 3.5 8.6 3.5 15.5c0 2.3.63 4.46 1.72 6.32L3 29l7.36-2.17a12.42 12.42 0 0 0 5.64 1.37h.005c6.9 0 12.5-5.6 12.5-12.5S22.9 3 16.001 3zm7.34 17.86c-.31.87-1.53 1.6-2.5 1.8-.66.14-1.53.25-4.44-.95-3.73-1.54-6.13-5.33-6.32-5.58-.19-.25-1.5-2-1.5-3.8 0-1.8.94-2.68 1.28-3.05.31-.34.68-.42.9-.42.23 0 .45.002.65.012.21.01.49-.08.76.58.31.75 1.05 2.55 1.14 2.73.09.19.15.4.03.65-.12.25-.19.4-.37.62-.19.22-.4.5-.57.67-.19.19-.39.4-.17.78.22.38.98 1.62 2.11 2.63 1.45 1.29 2.67 1.7 3.05 1.89.38.19.6.16.82-.1.22-.25.94-1.1 1.19-1.48.25-.38.5-.31.84-.19.34.12 2.15 1.02 2.52 1.2.37.19.62.28.71.44.09.15.09.85-.22 1.72z"/></svg>
+  <span dir="ltr">+961 70 906 509</span>
+</a>
+
+<script>
+  function setLang(lang) {
+    const body = document.getElementById('body');
+    const btnAr = document.getElementById('btn-ar');
+    const btnEn = document.getElementById('btn-en');
+    if (lang === 'en') {
+      body.classList.add('en');
+      body.setAttribute('dir', 'ltr');
+      body.setAttribute('lang', 'en');
+      btnEn.classList.add('active');
+      btnAr.classList.remove('active');
+    } else {
+      body.classList.remove('en');
+      body.setAttribute('dir', 'rtl');
+      body.setAttribute('lang', 'ar');
+      btnAr.classList.add('active');
+      btnEn.classList.remove('active');
+    }
+    try { localStorage.setItem('preferred_lang', lang); } catch (e) { /* localStorage unavailable -- just won't persist */ }
+  }
+
+  // English is the default for a first-time visitor -- only override to
+  // Arabic if that's what they explicitly chose on any other page (the
+  // portal, signup, KYC), since they all share this same localStorage key.
+  try {
+    const savedLang = localStorage.getItem('preferred_lang');
+    if (savedLang === 'ar') setLang('ar');
+  } catch (e) { /* localStorage unavailable -- stays on the default */ }
+
+  function showReset(e) {
+    e.preventDefault();
+    document.getElementById('form-wrap').classList.add('hide');
+    document.getElementById('reset-box').classList.add('show');
+  }
+
+  function showLogin(e) {
+    e.preventDefault();
+    document.getElementById('reset-box').classList.remove('show');
+    document.getElementById('form-wrap').classList.remove('hide');
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCgijCTp0ZKs9gmbZ9W-JAA7Z_R9dF6f3I",
+    authDomain: "harmonyfx-b92b1.firebaseapp.com",
+    projectId: "harmonyfx-b92b1",
+    storageBucket: "harmonyfx-b92b1.firebasestorage.app",
+    messagingSenderId: "1074001889938",
+    appId: "1:1074001889938:web:f61eda18136a4aaec8744b",
+    measurementId: "G-MPCV7VB5VN"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // While a Google sign-in is being handled by startGoogleLogin(), suppress this
+  // listener's own redirect so a brand-new user can be routed to the phone-number
+  // step instead of being bounced straight to portal.html before their profile exists.
+  let googleFlowInProgress = false;
+
+  // If already logged in with a verified email, go straight to portal.
+  // An unverified session sitting on this page (e.g. from before verification
+  // was required) gets signed out instead of let through.
+  onAuthStateChanged(auth, (user) => {
+    if (googleFlowInProgress) return;
+    if (user && user.emailVerified) {
+      window.location.href = 'portal.html';
+    } else if (user && !user.emailVerified) {
+      signOut(auth);
+    }
+  });
+
+  let pendingUnverifiedUser = null;
+
+  window.resendVerifyFromLogin = async function() {
+    const isAr = !document.getElementById('body').classList.contains('en');
+    if (!pendingUnverifiedUser) return;
+    try {
+      await sendEmailVerification(pendingUnverifiedUser);
+      alert(isAr ? 'تم إرسال رابط التفعيل من جديد. تحقق من بريدك.' : 'Verification email resent. Check your inbox.');
+    } catch (e) {
+      alert(isAr ? 'حدث خطأ. حاول لاحقاً.' : 'Something went wrong. Please try again later.');
+    }
+  };
+
+  // Login
+  document.getElementById('login-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    document.querySelectorAll('.form-error').forEach(el => el.classList.remove('show'));
+    document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+    document.getElementById('global-error').classList.remove('show');
+    document.getElementById('unverified-notice').classList.remove('show');
+
+    let valid = true;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      document.getElementById('email-error').classList.add('show');
+      document.getElementById('email').classList.add('error');
+      valid = false;
+    }
+    if (!password) {
+      document.getElementById('password-error').classList.add('show');
+      document.getElementById('password').classList.add('error');
+      valid = false;
+    }
+    if (!valid) return;
+
+    const btn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('spinner');
+    btn.disabled = true;
+    spinner.classList.add('show');
+
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+
+      if (!cred.user.emailVerified) {
+        pendingUnverifiedUser = cred.user;
+        await signOut(auth);
+        btn.disabled = false;
+        spinner.classList.remove('show');
+        document.getElementById('unverified-notice').classList.add('show');
+        return;
+      }
+
+      window.location.href = 'portal.html';
+    } catch(error) {
+      btn.disabled = false;
+      spinner.classList.remove('show');
+      const errEl = document.getElementById('global-error');
+      errEl.classList.add('show');
+      const isAr = !document.getElementById('body').classList.contains('en');
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        errEl.textContent = isAr ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' : 'Incorrect email or password.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errEl.textContent = isAr ? 'تم تعطيل الحساب مؤقتاً بسبب محاولات متعددة. حاول لاحقاً.' : 'Account temporarily disabled due to multiple attempts. Try again later.';
+      } else {
+        errEl.textContent = isAr ? 'حدث خطأ. الرجاء المحاولة مجدداً.' : 'An error occurred. Please try again.';
+      }
+    }
+  });
+
+  // Reset password
+  window.sendReset = async function() {
+    const email = document.getElementById('reset-email').value.trim();
+    const errEl = document.getElementById('reset-error');
+    const successEl = document.getElementById('reset-success');
+    const btn = document.getElementById('reset-btn');
+    const spinner = document.getElementById('reset-spinner');
+    const isAr = !document.getElementById('body').classList.contains('en');
+
+    errEl.classList.remove('show');
+    successEl.classList.remove('show');
+
+    if (!email) {
+      errEl.textContent = isAr ? 'الرجاء إدخال البريد الإلكتروني.' : 'Please enter your email.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    spinner.classList.add('show');
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      successEl.classList.add('show');
+      btn.disabled = false;
+      spinner.classList.remove('show');
+    } catch(error) {
+      btn.disabled = false;
+      spinner.classList.remove('show');
+      errEl.textContent = isAr ? 'حدث خطأ. تحقق من البريد الإلكتروني وحاول مجدداً.' : 'An error occurred. Check the email and try again.';
+      errEl.classList.add('show');
+    }
+  };
+
+  // ── Google Sign-In ──
+  const googleProvider = new GoogleAuthProvider();
+  let pendingGoogleUser = null;
+
+  window.startGoogleLogin = async function() {
+    const btn = document.getElementById('google-btn');
+    const spinner = document.getElementById('google-spinner');
+    const isAr = !document.getElementById('body').classList.contains('en');
+    googleFlowInProgress = true;
+    btn.disabled = true;
+    spinner.classList.add('show');
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      const userRef = doc(db, 'users', user.uid);
+      const snap = await getDoc(userRef);
+
+      if (snap.exists()) {
+        window.location.href = 'portal.html';
+        return;
+      }
+
+      // First time signing in with this Google account — collect a phone number
+      pendingGoogleUser = user;
+      document.getElementById('form-wrap').classList.add('hide');
+      document.getElementById('google-profile-box').classList.add('show');
+    } catch (error) {
+      googleFlowInProgress = false;
+      btn.disabled = false;
+      spinner.classList.remove('show');
+      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') return;
+      const errEl = document.getElementById('global-error');
+      errEl.classList.add('show');
+      if (error.code === 'auth/account-exists-with-different-credential') {
+        errEl.textContent = isAr ? 'هذا البريد مسجّل بالفعل بكلمة مرور. يرجى تسجيل الدخول بكلمة المرور.' : 'This email is already registered with a password. Please sign in with your password instead.';
+      } else {
+        errEl.textContent = isAr ? 'حدث خطأ أثناء تسجيل الدخول عبر Google. حاول مجدداً.' : 'Something went wrong signing in with Google. Please try again.';
+      }
+    }
+  };
+
+  window.completeGoogleProfile = async function() {
+    const isAr = !document.getElementById('body').classList.contains('en');
+    const phoneCode = document.getElementById('g-phone-code').value.trim();
+    const phone = document.getElementById('g-phone').value.trim();
+
+    document.getElementById('g-phone-error').classList.remove('show');
+    document.getElementById('google-profile-error').classList.remove('show');
+
+    if (!phone || phone.length < 7) {
+      document.getElementById('g-phone-error').classList.add('show');
+      return;
+    }
+
+    const btn = document.getElementById('google-profile-btn');
+    const spinner = document.getElementById('google-profile-spinner');
+    btn.disabled = true;
+    spinner.classList.add('show');
+
+    try {
+      const user = pendingGoogleUser;
+      await setDoc(doc(db, 'users', user.uid), {
+        brand: 'harmonyfx',
+        fullname: user.displayName || user.email.split('@')[0],
+        phone: phoneCode + phone,
+        email: user.email,
+        uid: user.uid,
+        mt5_login: null,
+        mt5_password: null,
+        mt5_server: 'Harmonic',
+        status: 'pending',
+        referral_code: user.uid.substring(0, 8).toUpperCase(),
+        referred_by: null,
+        created_at: serverTimestamp()
+      });
+      window.location.href = 'portal.html';
+    } catch (error) {
+      btn.disabled = false;
+      spinner.classList.remove('show');
+      const errEl = document.getElementById('google-profile-error');
+      errEl.classList.add('show');
+      errEl.textContent = isAr ? 'حدث خطأ. الرجاء المحاولة مجدداً.' : 'An error occurred. Please try again.';
+    }
+  };
+</script>
+
+</body>
+</html>

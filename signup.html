@@ -711,7 +711,7 @@
       const user = userCredential.user;
 
       // Save user data in Firestore first -- tagged as a Trateck client so
-      // the shared staff panel (staff.tratech.me) and any brand-aware logic
+      // the shared staff panel and any brand-aware logic
       // never confuses this with a Valmuntra signup. This must happen before
       // the verification email send: a failure there must never leave an
       // Auth account with no Firestore doc (invisible everywhere, and

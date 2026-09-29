@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harmony — Forex Trading</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=Noto+Serif+Arabic:wght@400;500&family=Noto+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Trateck — Trading, Built Right</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,300i,400i,500i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --navy:    #0D1F2D;
-    --teal:    #1A3A4A;
-    --gold:    #C9A84C;
-    --gold-lt: #E2C97E;
-    --cream:   #F5F0E8;
-    --steel:   #6B8F9E;
-    --muted:   #8A9BA5;
+    --navy:    #0F1C3A;
+    --teal:    #1D3162;
+    --gold:    #AAB5C1;
+    --gold-lt: #D4DAE1;
+    --cream:   #F5F7FA;
+    --steel:   #8A96A3;
+    --muted:   #8A96A3;
   }
 
   html { scroll-behavior: smooth; }
@@ -55,13 +56,13 @@
     transition: background 0.4s, padding 0.3s;
   }
   nav.scrolled {
-    background: rgba(13,31,45,0.95);
+    background: rgba(15,28,58,0.95);
     backdrop-filter: blur(8px);
     padding: 16px 60px;
   }
   .nav-left { display: flex; align-items: center; gap: 24px; }
   .nav-logo {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: 22px;
     font-weight: 500;
     color: var(--cream);
@@ -81,8 +82,8 @@
   .lang-toggle {
     display: flex;
     align-items: center;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(170,181,193,0.1);
+    border: 1px solid rgba(170,181,193,0.25);
     border-radius: 4px;
     overflow: hidden;
   }
@@ -126,8 +127,8 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse at 70% 50%, rgba(26,58,74,0.6) 0%, transparent 60%),
-      radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.06) 0%, transparent 50%);
+      radial-gradient(ellipse at 70% 50%, rgba(29,49,98,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(170,181,193,0.06) 0%, transparent 50%);
     pointer-events: none;
   }
   .calm-line {
@@ -159,7 +160,7 @@
   }
 
   .hero-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: clamp(42px, 6vw, 72px);
     font-weight: 400;
     line-height: 1.15;
@@ -169,7 +170,7 @@
     position: relative;
   }
   body.arabic .hero-title {
-    font-family: 'Noto Serif Arabic', serif;
+    font-family: 'Noto Sans Arabic', sans-serif;
     line-height: 1.4;
   }
   .hero-title .gold-line {
@@ -206,12 +207,12 @@
     letter-spacing: 0.5px;
     color: var(--muted);
     padding: 6px 14px;
-    border: 1px solid rgba(107,143,158,0.25);
+    border: 1px solid rgba(138,150,163,0.25);
     border-radius: 2px;
   }
   .hero-tag.highlight {
     color: var(--gold);
-    border-color: rgba(201,168,76,0.3);
+    border-color: rgba(170,181,193,0.3);
   }
 
   .hero-cta {
@@ -273,13 +274,13 @@
   }
   .pillar {
     padding: 0 48px 0 0;
-    border-right: 1px solid rgba(201,168,76,0.12);
+    border-right: 1px solid rgba(170,181,193,0.12);
     margin-right: 48px;
   }
   body.arabic .pillar {
     padding: 0 0 0 48px;
     border-right: none;
-    border-left: 1px solid rgba(201,168,76,0.12);
+    border-left: 1px solid rgba(170,181,193,0.12);
     margin-right: 0;
     margin-left: 48px;
   }
@@ -292,21 +293,21 @@
     padding-left: 0 !important;
   }
   .pillar-number {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: 48px;
     font-weight: 400;
-    color: rgba(201,168,76,0.2);
+    color: rgba(170,181,193,0.2);
     line-height: 1;
     margin-bottom: 24px;
   }
   .pillar-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: 22px;
     font-weight: 500;
     color: var(--cream);
     margin-bottom: 16px;
   }
-  body.arabic .pillar-title { font-family: 'Noto Serif Arabic', serif; }
+  body.arabic .pillar-title { font-family: 'Noto Sans Arabic', sans-serif; }
   .pillar-text { font-size: 14px; font-weight: 300; color: var(--steel); line-height: 1.9; }
 
   /* ── OLD SCHOOL SECTION */
@@ -336,14 +337,14 @@
     padding-top: 6px;
   }
   .oldschool-text {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: clamp(17px, 2vw, 22px);
     font-weight: 400;
     color: var(--cream);
     line-height: 1.8;
     opacity: 0.85;
   }
-  body.arabic .oldschool-text { font-family: 'Noto Serif Arabic', serif; }
+  body.arabic .oldschool-text { font-family: 'Noto Sans Arabic', sans-serif; }
   body.arabic .oldschool { grid-template-columns: 2fr 1fr; }
 
   /* ── STATEMENT */
@@ -361,11 +362,11 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(201,168,76,0.05) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(170,181,193,0.05) 0%, transparent 70%);
     pointer-events: none;
   }
   .statement-quote {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: clamp(24px, 3.5vw, 42px);
     font-weight: 400;
     color: var(--cream);
@@ -373,7 +374,7 @@
     line-height: 1.5;
     margin-bottom: 32px;
   }
-  body.arabic .statement-quote { font-family: 'Noto Serif Arabic', serif; line-height: 1.7; }
+  body.arabic .statement-quote { font-family: 'Noto Sans Arabic', sans-serif; line-height: 1.7; }
   .statement-quote em {
     font-style: italic;
     color: var(--gold-lt);
@@ -407,14 +408,14 @@
     opacity: 0.3;
   }
   .contact-left h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: clamp(32px, 4vw, 48px);
     font-weight: 400;
     color: var(--cream);
     line-height: 1.2;
     margin-bottom: 20px;
   }
-  body.arabic .contact-left h2 { font-family: 'Noto Serif Arabic', serif; line-height: 1.4; }
+  body.arabic .contact-left h2 { font-family: 'Noto Sans Arabic', sans-serif; line-height: 1.4; }
   .contact-left p { font-size: 15px; font-weight: 300; color: var(--steel); line-height: 1.8; max-width: 380px; }
   .contact-right { display: flex; flex-direction: column; gap: 20px; }
   .contact-item {
@@ -422,13 +423,13 @@
     align-items: flex-start;
     gap: 20px;
     padding: 24px 28px;
-    background: rgba(26,58,74,0.4);
+    background: rgba(29,49,98,0.4);
     border-left: 2px solid var(--gold);
     text-decoration: none;
     transition: background 0.2s;
   }
   body.arabic .contact-item { border-left: none; border-right: 2px solid var(--gold); flex-direction: row-reverse; }
-  .contact-item:hover { background: rgba(26,58,74,0.8); }
+  .contact-item:hover { background: rgba(29,49,98,0.8); }
   .contact-icon { font-size: 20px; margin-top: 2px; flex-shrink: 0; }
   .contact-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
   .contact-value { font-size: 15px; color: var(--cream); font-weight: 400; direction: ltr; unicode-bidi: embed; }
@@ -440,9 +441,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px solid rgba(201,168,76,0.1);
+    border-top: 1px solid rgba(170,181,193,0.1);
   }
-  .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--cream); opacity: 0.6; position: relative; }
+  .footer-logo { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 18px; color: var(--cream); opacity: 0.6; position: relative; }
   .footer-logo::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 10px; height: 1px; background: var(--gold); opacity: 0.6; }
   .footer-note { font-size: 12px; color: var(--muted); font-weight: 300; }
 
@@ -456,7 +457,7 @@
     .hero-title .gold-line { font-size: clamp(26px, 7vw, 40px); }
     .hero { padding: 170px 24px 80px; }
     .pillars { grid-template-columns: 1fr; padding: 80px 24px; }
-    .pillar { border-right: none; border-left: none !important; border-bottom: 1px solid rgba(201,168,76,0.12); margin: 0 !important; padding: 0 0 48px 0 !important; }
+    .pillar { border-right: none; border-left: none !important; border-bottom: 1px solid rgba(170,181,193,0.12); margin: 0 !important; padding: 0 0 48px 0 !important; }
     .pillar:last-child { border-bottom: none; padding-bottom: 0 !important; }
     .oldschool { grid-template-columns: 1fr; padding: 80px 24px; gap: 24px; }
     body.arabic .oldschool { grid-template-columns: 1fr; }
@@ -477,7 +478,7 @@
 
 <nav id="nav">
   <div class="nav-left">
-    <a href="#" class="nav-logo"><img src="harmony-logo-02.png" alt="Harmony" /></a>
+    <a href="#" class="nav-logo"><img src="trateck-logo-light.svg" alt="Trateck" /></a>
     <div class="lang-toggle">
       <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
       <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
@@ -625,25 +626,25 @@
     </a>
   </div>
   <div class="contact-right">
-    <a href="https://wa.me/96170906509" class="contact-item" target="_blank">
+    <a href="https://wa.me/35794595995" class="contact-item" target="_blank">
       <div class="contact-icon">💬</div>
       <div>
         <div class="contact-label">WhatsApp</div>
-        <div class="contact-value">+961 70 906 509</div>
+        <div class="contact-value">+357 94 595995</div>
       </div>
     </a>
-    <a href="mailto:support@harmonyfx.me" class="contact-item">
+    <a href="mailto:support@trateck.me" class="contact-item">
       <div class="contact-icon">✉️</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-value">support@harmonyfx.me</div>
+        <div class="contact-value">support@trateck.me</div>
       </div>
     </a>
-    <a href="https://t.me/harmonyfx" class="contact-item" target="_blank">
-      <div class="contact-icon">✈️</div>
+    <a href="https://www.instagram.com/trateck.lb/" class="contact-item" target="_blank" rel="noopener">
+      <div class="contact-icon">📷</div>
       <div>
-        <div class="contact-label">Telegram</div>
-        <div class="contact-value">@harmonyfx</div>
+        <div class="contact-label">Instagram</div>
+        <div class="contact-value">@trateck.lb</div>
       </div>
     </a>
   </div>
@@ -651,14 +652,14 @@
 
 <section style="max-width:900px;margin:0 auto;padding:32px 24px 0;">
   <div style="background:rgba(232,131,122,0.08);border:1px solid rgba(232,131,122,0.25);padding:20px 24px;font-size:13px;line-height:1.8;color:var(--muted);">
-    <p class="lang-en"><strong style="color:var(--cream);">Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors. You could sustain a loss of some or all of your invested capital, and should not invest money you cannot afford to lose. Past performance is not indicative of future results. Harmony acts as an introducing broker and does not guarantee any profit or protect against loss. Please read our <a href="terms-of-service.html" style="color:var(--gold-lt);">Terms of Service</a> before trading.</p>
-    <p class="lang-ar"><strong style="color:var(--cream);">تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية الأخرى ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. قد تتكبد خسارة لبعض أو كل رأس مالك المستثمر، ولا ينبغي عليك استثمار أموال لا يمكنك تحمل خسارتها. الأداء السابق لا يشير إلى النتائج المستقبلية. تعمل Harmony كوسيط تعريف ولا تضمن أي ربح أو حماية من الخسارة. يرجى قراءة <a href="terms-of-service.html" style="color:var(--gold-lt);">شروط الخدمة</a> قبل التداول.</p>
+    <p class="lang-en"><strong style="color:var(--cream);">Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors. You could sustain a loss of some or all of your invested capital, and should not invest money you cannot afford to lose. Past performance is not indicative of future results. Trateck acts as an introducing broker and does not guarantee any profit or protect against loss. Please read our <a href="terms-of-service.html" style="color:var(--gold-lt);">Terms of Service</a> before trading.</p>
+    <p class="lang-ar"><strong style="color:var(--cream);">تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية الأخرى ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. قد تتكبد خسارة لبعض أو كل رأس مالك المستثمر، ولا ينبغي عليك استثمار أموال لا يمكنك تحمل خسارتها. الأداء السابق لا يشير إلى النتائج المستقبلية. تعمل Trateck كوسيط تعريف ولا تضمن أي ربح أو حماية من الخسارة. يرجى قراءة <a href="terms-of-service.html" style="color:var(--gold-lt);">شروط الخدمة</a> قبل التداول.</p>
   </div>
 </section>
 
 <footer>
-  <div class="footer-logo"><img src="harmony-logo-01.png" alt="Harmony" style="height:20px;width:auto;opacity:0.6;" /></div>
-  <div class="footer-note">© 2026 Harmony · harmonyfx.me · All rights reserved</div>
+  <div class="footer-logo"><img src="trateck-logo-light.svg" alt="Trateck" style="height:20px;width:auto;opacity:0.6;" /></div>
+  <div class="footer-note">© 2026 Trateck · trateck.me · All rights reserved</div>
   <div class="footer-note" style="margin-top:8px;">
     <a href="privacy-policy.html" style="color:inherit;opacity:0.7;text-decoration:none;">Privacy Policy</a>
     &nbsp;·&nbsp;

@@ -3,21 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms of Service — Harmony</title>
-<link rel="icon" href="harmony-logo-01.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Arabic:wght@400;500;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Terms of Service — Trateck</title>
+<link rel="icon" type="image/svg+xml" href="trateck-favicon.svg">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,300i,400i,500i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --navy:    #0D1F2D;
-    --navy-lt: #14293A;
-    --teal:    #1A3A4A;
-    --gold:    #C9A84C;
-    --gold-lt: #E2C97E;
-    --cream:   #F5F0E8;
-    --steel:   #6B8F9E;
+    --navy:    #0F1C3A;
+    --navy-lt: #15264C;
+    --teal:    #1D3162;
+    --gold:    #AAB5C1;
+    --gold-lt: #D4DAE1;
+    --cream:   #F5F7FA;
+    --steel:   #8A96A3;
     --err:     #E8837A;
-    --line:    rgba(245,240,232,0.09);
+    --line:    rgba(245,247,250,0.09);
   }
   body {
     font-family: 'Inter', sans-serif;
@@ -46,7 +47,7 @@
   .nav-back:hover { color: var(--gold-lt); }
   .lang-toggle {
     display: flex; align-items: center;
-    background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(170,181,193,0.1); border: 1px solid rgba(170,181,193,0.25);
     border-radius: 4px; overflow: hidden;
   }
   .lang-btn {
@@ -58,22 +59,22 @@
 
   .wrap { max-width: 760px; margin: 0 auto; padding: 56px 24px 100px; }
   h1 {
-    font-family: 'Playfair Display', serif; font-weight: 500;
+    font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 500;
     font-size: 32px; color: var(--cream); margin-bottom: 8px;
   }
-  body.arabic h1 { font-family: 'Noto Serif Arabic', serif; font-weight: 700; }
+  body.arabic h1 { font-family: 'Noto Sans Arabic', sans-serif; font-weight: 700; }
   .updated { font-size: 13px; color: var(--steel); margin-bottom: 40px; }
   h2 {
-    font-family: 'Playfair Display', serif; font-weight: 500;
+    font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 500;
     font-size: 20px; color: var(--gold-lt); margin: 36px 0 12px;
   }
-  body.arabic h2 { font-family: 'Noto Serif Arabic', serif; font-weight: 700; }
-  p, li { font-size: 15px; color: rgba(245,240,232,0.85); margin-bottom: 12px; }
+  body.arabic h2 { font-family: 'Noto Sans Arabic', sans-serif; font-weight: 700; }
+  p, li { font-size: 15px; color: rgba(245,247,250,0.85); margin-bottom: 12px; }
   ul { padding-inline-start: 20px; margin-bottom: 12px; }
   strong { color: var(--cream); }
   a { color: var(--gold-lt); }
   .draft-note {
-    background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(170,181,193,0.08); border: 1px solid rgba(170,181,193,0.25);
     padding: 16px 20px; font-size: 13px; color: var(--steel); margin-bottom: 40px; line-height: 1.7;
   }
   .risk-box {
@@ -87,15 +88,15 @@
 <body id="body">
 
 <nav>
-  <a href="index.html" class="nav-logo"><img src="harmony-logo-02.png" alt="Harmony"></a>
+  <a href="index.html" class="nav-logo"><img src="trateck-logo-light.svg" alt="Trateck"></a>
   <div class="nav-right">
     <div class="lang-toggle">
       <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
       <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
     </div>
     <a href="index.html" class="nav-back">
-      <span class="lang-en">← Back to harmonyfx.me</span>
-      <span class="lang-ar">→ العودة إلى harmonyfx.me</span>
+      <span class="lang-en">← Back to trateck.me</span>
+      <span class="lang-ar">→ العودة إلى trateck.me</span>
     </a>
   </div>
 </nav>
@@ -105,8 +106,8 @@
   <p class="updated"><span class="lang-en">Last updated: September 2026</span><span class="lang-ar">آخر تحديث: سبتمبر 2026</span></p>
 
   <p>
-    <span class="lang-en">These Terms of Service ("Terms") govern your access to and use of the Harmony website (harmonyfx.me) and client portal (together, the "Services"), operated by Harmony ("Harmony", "we", "us", or "our"). By creating an account or using the Services, you agree to these Terms.</span>
-    <span class="lang-ar">تحكم شروط الخدمة هذه ("الشروط") وصولك إلى واستخدامك لموقع Harmony الإلكتروني (harmonyfx.me) وبوابة العملاء (معاً، "الخدمات")، والتي تديرها Harmony ("Harmony" أو "نحن" أو "لنا"). بإنشائك لحساب أو استخدامك للخدمات، فإنك توافق على هذه الشروط.</span>
+    <span class="lang-en">These Terms of Service ("Terms") govern your access to and use of the Trateck website (trateck.me) and client portal (together, the "Services"), operated by Trateck ("Trateck", "we", "us", or "our"). By creating an account or using the Services, you agree to these Terms.</span>
+    <span class="lang-ar">تحكم شروط الخدمة هذه ("الشروط") وصولك إلى واستخدامك لموقع Trateck الإلكتروني (trateck.me) وبوابة العملاء (معاً، "الخدمات")، والتي تديرها Trateck ("Trateck" أو "نحن" أو "لنا"). بإنشائك لحساب أو استخدامك للخدمات، فإنك توافق على هذه الشروط.</span>
   </p>
 
   <h2><span class="lang-en">1. Eligibility</span><span class="lang-ar">1. الأهلية</span></h2>
@@ -123,13 +124,13 @@
 
   <h2><span class="lang-en">3. Nature of the Services</span><span class="lang-ar">3. طبيعة الخدمات</span></h2>
   <p>
-    <span class="lang-en">Harmony acts as an introducing broker, partnering with Harmonic to help clients open and manage a trading account on the MT5 platform, and to coordinate deposit and withdrawal requests on your behalf. Harmony's portal is not itself a trading platform — it is a client-facing coordination and account-management layer; trade execution and the underlying trading account are provided by Harmonic.</span>
-    <span class="lang-ar">تعمل Harmony كوسيط تعريف (introducing broker)، بالشراكة مع Harmonic لمساعدة العملاء على فتح وإدارة حساب تداول على منصة MT5، وتنسيق طلبات الإيداع والسحب نيابة عنك. بوابة Harmony ليست بحد ذاتها منصة تداول — بل هي طبقة تنسيق وإدارة حساب موجهة للعميل؛ يتم تنفيذ التداول وتوفير حساب التداول الأساسي من قبل Harmonic.</span>
+    <span class="lang-en">Trateck acts as an introducing broker, partnering with Harmonic to help clients open and manage a trading account on the MT5 platform, and to coordinate deposit and withdrawal requests on your behalf. Trateck's portal is not itself a trading platform — it is a client-facing coordination and account-management layer; trade execution and the underlying trading account are provided by Harmonic.</span>
+    <span class="lang-ar">تعمل Trateck كوسيط تعريف (introducing broker)، بالشراكة مع Harmonic لمساعدة العملاء على فتح وإدارة حساب تداول على منصة MT5، وتنسيق طلبات الإيداع والسحب نيابة عنك. بوابة Trateck ليست بحد ذاتها منصة تداول — بل هي طبقة تنسيق وإدارة حساب موجهة للعميل؛ يتم تنفيذ التداول وتوفير حساب التداول الأساسي من قبل Harmonic.</span>
   </p>
 
   <div class="risk-box">
-    <span class="lang-en"><strong>Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors. You could sustain a loss of some or all of your invested capital. You should not invest money that you cannot afford to lose, and you should be aware of all the risks associated with leveraged trading before using the Services. Past performance is not indicative of future results, and Harmony makes no guarantee of profit or protection against loss.</span>
-    <span class="lang-ar"><strong>تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية الأخرى ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. قد تتكبد خسارة لبعض أو كل رأس مالك المستثمر. لا ينبغي عليك استثمار أموال لا يمكنك تحمل خسارتها، ويجب أن تكون على علم بجميع المخاطر المرتبطة بالتداول بالرافعة المالية قبل استخدام الخدمات. الأداء السابق لا يشير إلى النتائج المستقبلية، ولا تقدم Harmony أي ضمان للربح أو الحماية من الخسارة.</span>
+    <span class="lang-en"><strong>Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors. You could sustain a loss of some or all of your invested capital. You should not invest money that you cannot afford to lose, and you should be aware of all the risks associated with leveraged trading before using the Services. Past performance is not indicative of future results, and Trateck makes no guarantee of profit or protection against loss.</span>
+    <span class="lang-ar"><strong>تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية الأخرى ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. قد تتكبد خسارة لبعض أو كل رأس مالك المستثمر. لا ينبغي عليك استثمار أموال لا يمكنك تحمل خسارتها، ويجب أن تكون على علم بجميع المخاطر المرتبطة بالتداول بالرافعة المالية قبل استخدام الخدمات. الأداء السابق لا يشير إلى النتائج المستقبلية، ولا تقدم Trateck أي ضمان للربح أو الحماية من الخسارة.</span>
   </div>
 
   <h2><span class="lang-en">4. Deposits &amp; Withdrawals</span><span class="lang-ar">4. الإيداعات والسحوبات</span></h2>
@@ -154,14 +155,14 @@
 
   <h2><span class="lang-en">7. Intellectual Property</span><span class="lang-ar">7. الملكية الفكرية</span></h2>
   <p>
-    <span class="lang-en">The Harmony name, logo, and the content of the website and portal are the property of Harmony or its licensors and may not be used without our prior written permission.</span>
-    <span class="lang-ar">اسم وشعار Harmony، ومحتوى الموقع الإلكتروني والبوابة، هي ملك لـ Harmony أو مرخّصيها ولا يجوز استخدامها دون إذن كتابي مسبق منا.</span>
+    <span class="lang-en">The Trateck name, logo, and the content of the website and portal are the property of Trateck or its licensors and may not be used without our prior written permission.</span>
+    <span class="lang-ar">اسم وشعار Trateck، ومحتوى الموقع الإلكتروني والبوابة، هي ملك لـ Trateck أو مرخّصيها ولا يجوز استخدامها دون إذن كتابي مسبق منا.</span>
   </p>
 
   <h2><span class="lang-en">8. Disclaimers &amp; Limitation of Liability</span><span class="lang-ar">8. إخلاء المسؤولية وتحديدها</span></h2>
   <p>
-    <span class="lang-en">The Services are provided "as is" without warranties of any kind, to the fullest extent permitted by law. To the fullest extent permitted by law, Harmony shall not be liable for any indirect, incidental, or consequential damages, or for trading losses, arising from your use of the Services.</span>
-    <span class="lang-ar">يتم تقديم الخدمات "كما هي" دون أي ضمانات من أي نوع، إلى أقصى حد يسمح به القانون. إلى أقصى حد يسمح به القانون، لن تكون Harmony مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية، أو عن خسائر التداول، الناشئة عن استخدامك للخدمات.</span>
+    <span class="lang-en">The Services are provided "as is" without warranties of any kind, to the fullest extent permitted by law. To the fullest extent permitted by law, Trateck shall not be liable for any indirect, incidental, or consequential damages, or for trading losses, arising from your use of the Services.</span>
+    <span class="lang-ar">يتم تقديم الخدمات "كما هي" دون أي ضمانات من أي نوع، إلى أقصى حد يسمح به القانون. إلى أقصى حد يسمح به القانون، لن تكون Trateck مسؤولة عن أي أضرار غير مباشرة أو عرضية أو تبعية، أو عن خسائر التداول، الناشئة عن استخدامك للخدمات.</span>
   </p>
 
   <h2><span class="lang-en">9. Termination</span><span class="lang-ar">9. الإنهاء</span></h2>
@@ -178,13 +179,13 @@
 
   <h2><span class="lang-en">11. Contact Us</span><span class="lang-ar">11. تواصل معنا</span></h2>
   <p>
-    <span class="lang-en">If you have questions about these Terms, contact us at <a href="mailto:support@harmonyfx.me">support@harmonyfx.me</a> or via WhatsApp at +961 70 906 509.</span>
-    <span class="lang-ar">إذا كانت لديك أسئلة حول هذه الشروط، تواصل معنا عبر <a href="mailto:support@harmonyfx.me">support@harmonyfx.me</a> أو عبر واتساب على +961 70 906 509.</span>
+    <span class="lang-en">If you have questions about these Terms, contact us at <a href="mailto:support@trateck.me">support@trateck.me</a> or via WhatsApp at +357 94 595995.</span>
+    <span class="lang-ar">إذا كانت لديك أسئلة حول هذه الشروط، تواصل معنا عبر <a href="mailto:support@trateck.me">support@trateck.me</a> أو عبر واتساب على +357 94 595995.</span>
   </p>
 </div>
 
 <footer>
-  <img src="harmony-logo-01.png" alt="Harmony">
+  <img src="trateck-logo-light.svg" alt="Trateck">
 </footer>
 
 <script>

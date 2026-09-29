@@ -601,6 +601,42 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
+  // ── IB attribution: the partner link a client arrived with decides their
+  // IB, product and MT5 group permanently. No (valid) link -> Trateck Retail's
+  // default product, via the '_default' alias doc the staff panel maintains.
+  function ibCodeFromVisit() {
+    try {
+      const fromUrl = new URLSearchParams(location.search).get('ib');
+      if (fromUrl) return fromUrl;
+      const saved = JSON.parse(localStorage.getItem('trateck_ib') || 'null');
+      if (saved && Date.now() - saved.at < 30 * 24 * 3600 * 1000) return saved.code;
+    } catch (e) { /* storage unavailable */ }
+    return null;
+  }
+  async function resolveIb() {
+    const code = ibCodeFromVisit();
+    for (const c of (code ? [code, '_default'] : ['_default'])) {
+      try {
+        const snap = await getDoc(doc(db, 'ib_links', c));
+        if (snap.exists() && snap.data().active !== false) {
+          const d = snap.data();
+          return {
+            ib_link_code: d.code || c,
+            ib_id: d.ib_id, ib_name: d.ib_name || null,
+            main_ib_id: d.main_ib_id || d.ib_id, main_ib_name: d.main_ib_name || d.ib_name || null,
+            product_id: d.product_id || null, product_name: d.product_name || null,
+            mt5_group: d.mt5_group || null
+          };
+        }
+      } catch (e) { console.error('IB link lookup failed:', e); }
+    }
+    return {
+      ib_link_code: null, ib_id: 'retail', ib_name: 'Trateck Retail',
+      main_ib_id: 'retail', main_ib_name: 'Trateck Retail',
+      product_id: null, product_name: null, mt5_group: null
+    };
+  }
+
   // Password strength
   document.getElementById('password').addEventListener('input', function() {
     const val = this.value;
@@ -681,8 +717,11 @@
       // unrecoverable by the user since re-signing up hits
       // auth/email-already-in-use).
       const referredBy = new URLSearchParams(window.location.search).get('ref');
+      const ib = await resolveIb();
       await setDoc(doc(db, 'users', user.uid), {
         brand: 'trateck',
+        ...ib,
+        ib_assigned_at: serverTimestamp(),
         fullname: fullname,
         phone: phoneCode + phone,
         email: email,
@@ -798,8 +837,11 @@
     try {
       const user = pendingGoogleUser;
       const referredBy = new URLSearchParams(window.location.search).get('ref');
+      const ib = await resolveIb();
       await setDoc(doc(db, 'users', user.uid), {
         brand: 'trateck',
+        ...ib,
+        ib_assigned_at: serverTimestamp(),
         fullname: user.displayName || user.email.split('@')[0],
         phone: phoneCode + phone,
         email: user.email,
@@ -860,5 +902,17 @@
     if (savedLang === 'ar') setLang('ar');
   } catch (e) { /* localStorage unavailable -- stays on the default */ }
 </script>
+<script>
+  // Remember an IB partner link (?ib=CODE) for 30 days, so an IB can share any Trateck page.
+  (function () {
+    try {
+      var code = new URLSearchParams(location.search).get('ib');
+      if (code && /^[A-Za-z0-9_-]{3,32}$/.test(code)) {
+        localStorage.setItem('trateck_ib', JSON.stringify({ code: code, at: Date.now() }));
+      }
+    } catch (e) { /* storage unavailable */ }
+  })();
+</script>
+
 </body>
 </html>

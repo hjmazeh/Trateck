@@ -551,8 +551,9 @@
         </button>
       </div>
 
-      <!-- Referral -->
-      <div class="referral-card">
+      <!-- Referral: the client's own referral code is kept for internal
+           reference only on Trateck, so the card stays hidden. -->
+      <div class="referral-card" style="display:none;">
         <div class="referral-card-title lang-ar">رابط الإحالة</div>
         <div class="referral-card-title lang-en">Referral Link</div>
         <p class="referral-card-sub lang-ar">شارك رابطك مع أصدقائك واكسب عمولات على تداولاتهم</p>
@@ -982,6 +983,17 @@
     }
     renderStatusCard();
 
+    // IB details copied onto every request, so staff always see who the
+    // client belongs to even if the client is later moved to another IB.
+    const ibSnapshot = () => ({
+      ib_id: data.ib_id || null, ib_name: data.ib_name || null,
+      main_ib_id: data.main_ib_id || null, main_ib_name: data.main_ib_name || null,
+      product_name: data.product_name || null, mt5_group: data.mt5_group || null
+    });
+    const ibLine = () => `IB: ${data.ib_name || data.ib_id || '—'}` +
+      (data.main_ib_id && data.main_ib_id !== data.ib_id ? ` (sub-IB of ${data.main_ib_name || data.main_ib_id})` : '') +
+      `\nProduct: ${data.product_name || '—'}\nMT5 group: ${data.mt5_group || '—'}`;
+
     // Request MT5 function — also used from the active view to request a
     // 2nd/3rd account, not just the first one from kyc_approved.
     window.requestMT5 = async function() {
@@ -1005,7 +1017,7 @@
           to_email: 'support@trateck.me',
           reply_to: user.email,
           subject: 'MT5 Account Requested — ' + (data.fullname || ''),
-          message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nPhone: ${data.phone || ''}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\n${wasActive ? 'Client is already active and has requested an additional MT5 account.' : 'Client is KYC-approved and has requested an MT5 account.'}`
+          message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nPhone: ${data.phone || ''}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\n${wasActive ? 'Client is already active and has requested an additional MT5 account.' : 'Client is KYC-approved and has requested an MT5 account.'}\n\n${ibLine()}`
         });
       } catch (emailErr) {
         console.log('MT5 request notification failed:', emailErr);
@@ -1121,6 +1133,7 @@
           fullname: data.fullname || '',
           email: user.email,
           mt5_login: selectedLogin,
+          ...ibSnapshot(),
           method: 'Whish Money',
           claimed_amount: amount,
           approved_amount: null,
@@ -1137,7 +1150,7 @@
             to_email: 'support@trateck.me',
             reply_to: user.email,
             subject: 'New Deposit Request — ' + (data.fullname || ''),
-            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}`
+            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\n\n${ibLine()}`
           });
         } catch (emailErr) { console.log('Deposit notification failed:', emailErr); }
 
@@ -1213,6 +1226,7 @@
           fullname: data.fullname || '',
           email: user.email,
           mt5_login: selectedLogin,
+          ...ibSnapshot(),
           method,
           amount,
           destination,
@@ -1229,7 +1243,7 @@
             to_email: 'support@trateck.me',
             reply_to: user.email,
             subject: 'New Withdrawal Request — ' + (data.fullname || ''),
-            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\nMethod: ${method}\nDestination: ${JSON.stringify(destination)}`
+            message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\nMethod: ${method}\nDestination: ${JSON.stringify(destination)}\n\n${ibLine()}`
           });
         } catch (emailErr) { console.log('Withdrawal notification failed:', emailErr); }
 

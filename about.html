@@ -338,5 +338,17 @@
   try { if (localStorage.getItem('preferred_lang') === 'ar') setLang('ar'); } catch (e) { /* storage unavailable */ }
 </script>
 
+<script>
+  // Remember an IB partner link (?ib=CODE) for 30 days, so an IB can share any Trateck page.
+  (function () {
+    try {
+      var code = new URLSearchParams(location.search).get('ib');
+      if (code && /^[A-Za-z0-9_-]{3,32}$/.test(code)) {
+        localStorage.setItem('trateck_ib', JSON.stringify({ code: code, at: Date.now() }));
+      }
+    } catch (e) { /* storage unavailable */ }
+  })();
+</script>
+
 </body>
 </html>

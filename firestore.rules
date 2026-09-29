@@ -66,6 +66,12 @@ service cloud.firestore {
       allow list, write: if isAdmin();
     }
 
+    // Product catalog (MT5 groups) imported from the Backoffice, picked from
+    // when giving an IB its products. Staff only.
+    match /products/{productId} {
+      allow read, write: if isAdmin();
+    }
+
     // Log of clients moved from one IB to another. Staff only, append-only.
     match /ib_moves/{moveId} {
       allow read, create: if isAdmin();

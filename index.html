@@ -98,7 +98,7 @@
     text-decoration: none;
     position: relative;
   }
-  .nav-logo img { height: 55px; width: auto; display: block; }
+  .nav-logo img { height: 66px; width: auto; display: block; }
   .nav-logo-old::after {
     content: '';
     position: absolute;
@@ -168,7 +168,6 @@
     gap: 12px;
     position: relative;
   }
-  body.arabic .hero-eyebrow { flex-direction: row-reverse; }
   .hero-eyebrow::before {
     content: '';
     display: inline-block;
@@ -217,7 +216,6 @@
     gap: 8px;
     margin-bottom: 48px;
   }
-  body.arabic .hero-tags { flex-direction: row-reverse; }
   .hero-tag {
     font-size: 12px;
     font-weight: 500;
@@ -262,7 +260,6 @@
     width: fit-content;
   }
   .hero-cta:hover { background: var(--gold-lt); gap: 18px; }
-  body.arabic .hero-cta { flex-direction: row-reverse; }
 
   .hero-scroll {
     position: absolute;
@@ -475,7 +472,7 @@
     text-decoration: none;
     transition: background 0.2s;
   }
-  body.arabic .contact-item { border-left: none; border-right: 2px solid var(--gold); flex-direction: row-reverse; }
+  body.arabic .contact-item { border-left: none; border-right: 2px solid var(--gold); }
   .contact-item:hover { background: rgba(29,49,98,0.8); }
   .contact-icon { font-size: 20px; margin-top: 2px; flex-shrink: 0; }
   .contact-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
@@ -491,14 +488,13 @@
     border-top: 1px solid rgba(170,181,193,0.1);
   }
   .footer-logo { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 18px; color: var(--cream); opacity: 0.6; position: relative; }
-  .footer-logo::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 10px; height: 1px; background: var(--gold); opacity: 0.6; }
   .footer-note { font-size: 12px; color: var(--muted); font-weight: 300; }
 
   /* ── RESPONSIVE */
   @media (max-width: 900px) {
     nav, nav.scrolled { padding: 14px 20px; }
     nav.menu-open { background: rgba(15,28,58,0.98); }
-    .nav-logo img { height: 34px; }
+    .nav-logo img { height: 42px; }
     .nav-left .lang-toggle, .nav-links, .nav-btn.ghost { display: none; }
     .nav-right { gap: 10px; }
     .nav-btn.solid { height: 40px; padding: 0 14px; font-size: 12px; }
@@ -596,10 +592,12 @@
   </p>
 
   <div class="hero-tags">
+    <span class="hero-tag highlight lang-en">Introducing broker</span>
     <span class="hero-tag lang-en">MT5 platform</span>
     <span class="hero-tag lang-en">Forex · Indices · Commodities</span>
     <span class="hero-tag pay lang-en"><img src="whish-money-logo.svg" alt="" /><img src="tether-logo.svg" alt="" />Whish Money &amp; USDT</span>
     <span class="hero-tag highlight lang-en">Grow the right way, not the fast way</span>
+    <span class="hero-tag highlight lang-ar">وسيط تعريف</span>
     <span class="hero-tag lang-ar">منصة MT5</span>
     <span class="hero-tag lang-ar">عملات · مؤشرات · سلع</span>
     <span class="hero-tag pay lang-ar"><img src="whish-money-logo.svg" alt="" /><img src="tether-logo.svg" alt="" />Whish Money و USDT</span>
@@ -609,7 +607,7 @@
   <a href="signup.html" class="hero-cta">
     <span class="lang-en">Open your account</span>
     <span class="lang-ar">افتح حسابك</span>
-    <span>→</span>
+    <span class="lang-en">→</span><span class="lang-ar">←</span>
   </a>
 
   <div class="hero-scroll">
@@ -665,8 +663,8 @@
     <span class="lang-ar">مبنيّ ليدوم.</span>
   </div>
   <p class="oldschool-text">
-    <span class="lang-en">Trateck is built by the people who work behind trading brands: the systems, the ethics, the marketing and the technology. We bring the same discipline to every client account. Clear conditions, honest communication, and processes that don't cut corners. We would rather grow slowly with traders who stay than quickly with traders who leave.</span>
-    <span class="lang-ar">بُنيت Trateck على أيدي من يعملون خلف العلامات التجارية في عالم التداول: الأنظمة، والأخلاقيات، والتسويق، والتكنولوجيا. نطبّق الانضباط ذاته على كل حساب عميل. شروط واضحة، وتواصل صادق، وإجراءات لا تختصر الطريق. نفضّل أن ننمو ببطء مع متداولين يبقون معنا، على أن ننمو بسرعة مع متداولين يرحلون.</span>
+    <span class="lang-en">Trateck is built by the people who work behind trading brands: the systems, the ethics, the marketing and the technology. We bring the same discipline to every client account. Clear conditions, honest communication, and processes that don't cut corners. We would rather grow slowly with traders who stay than quickly with traders who leave. As an introducing broker, we connect you to Harmonic's MT5 platform, where your trading account is held and your trades are executed, and we stay with you on every step: verification, funding, withdrawals and support.</span>
+    <span class="lang-ar">بُنيت Trateck على أيدي من يعملون خلف العلامات التجارية في عالم التداول: الأنظمة، والأخلاقيات، والتسويق، والتكنولوجيا. نطبّق الانضباط ذاته على كل حساب عميل. شروط واضحة، وتواصل صادق، وإجراءات لا تختصر الطريق. نفضّل أن ننمو ببطء مع متداولين يبقون معنا، على أن ننمو بسرعة مع متداولين يرحلون. بصفتنا وسيط تعريف، نربطك بمنصة MT5 التابعة لـ Harmonic، حيث يُحفظ حساب التداول الخاص بك وتُنفَّذ صفقاتك، ونبقى معك في كل خطوة: التحقق من الهوية، والتمويل، والسحب، والدعم.</span>
   </p>
 </section>
 
@@ -682,7 +680,7 @@
     </span>
   </p>
   <div class="statement-line"></div>
-  <p class="statement-sub">MT5 Platform &nbsp;·&nbsp; Forex &nbsp;·&nbsp; Indices &nbsp;·&nbsp; Commodities</p>
+  <p class="statement-sub"><span class="lang-en">Introducing broker</span><span class="lang-ar">وسيط تعريف</span> &nbsp;·&nbsp; MT5 &nbsp;·&nbsp; <span class="lang-en">Forex · Indices · Commodities</span><span class="lang-ar">عملات · مؤشرات · سلع</span></p>
 </section>
 
 <section class="contact" id="contact">
@@ -733,7 +731,7 @@
 <footer>
   <div class="footer-logo"><img src="trateck-logo-light.svg" alt="Trateck" style="height:24px;width:auto;opacity:0.7;" /></div>
   <div class="footer-note" style="letter-spacing:3px;text-transform:uppercase;font-weight:600;">
-    <span class="lang-en">Regulated by ethics</span><span class="lang-ar">الأخلاق رقيبُنا</span>
+    <span class="lang-en">Regulated by ethics</span><span class="lang-ar" style="letter-spacing:0;">الأخلاق رقيبُنا</span>
   </div>
   <div class="footer-note">
     <a href="about.html" style="color:inherit;opacity:0.8;text-decoration:none;"><span class="lang-en">About</span><span class="lang-ar">من نحن</span></a>

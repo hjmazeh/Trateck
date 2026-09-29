@@ -62,7 +62,7 @@
     border-bottom: 1px solid var(--line);
     background: var(--navy);
   }
-  .nav-logo img { height: 48px; width: auto; }
+  .nav-logo img { height: 58px; width: auto; }
   .nav-right { display: flex; align-items: center; gap: 20px; }
   .lang-toggle {
     display: flex;
@@ -429,7 +429,7 @@
         <div class="form-group">
           <label class="form-label lang-ar">الاسم الكامل</label>
           <label class="form-label lang-en">Full Name</label>
-          <input type="text" class="form-input" id="fullname" placeholder="Melhem Barakat" autocomplete="name">
+          <input type="text" class="form-input" id="fullname" placeholder="Sameer Elhajj" autocomplete="name">
           <div class="form-error" id="fullname-error">
             <span class="lang-ar">الرجاء إدخال الاسم الكامل</span>
             <span class="lang-en">Please enter your full name</span>
@@ -799,7 +799,7 @@
       btnEn.classList.remove('active');
     }
     const fullnameInput = document.getElementById('fullname');
-    if (fullnameInput) fullnameInput.placeholder = lang === 'en' ? 'Melhem Barakat' : 'ملحم بركات';
+    if (fullnameInput) fullnameInput.placeholder = lang === 'en' ? 'Sameer Elhajj' : 'سمير الحاج';
     const passwordInput = document.getElementById('password');
     if (passwordInput) passwordInput.placeholder = lang === 'en' ? 'At least 8 characters' : '8 أحرف على الأقل';
     const confirmInput = document.getElementById('confirm-password');

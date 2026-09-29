@@ -60,7 +60,35 @@
     backdrop-filter: blur(8px);
     padding: 16px 60px;
   }
-  .nav-left { display: flex; align-items: center; gap: 24px; }
+  .nav-left { display: flex; align-items: center; gap: 20px; }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-link {
+    font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
+    color: var(--cream); opacity: 0.8; text-decoration: none; transition: opacity 0.2s;
+  }
+  .nav-link:hover { opacity: 1; }
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  .nav-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 40px; padding: 0 18px; border-radius: 3px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.3px; white-space: nowrap;
+    text-decoration: none; transition: background 0.2s, border-color 0.2s;
+  }
+  .nav-btn.ghost { color: var(--cream); border: 1px solid rgba(245,247,250,0.28); }
+  .nav-btn.ghost:hover { border-color: var(--cream); }
+  .nav-btn.solid { background: var(--gold); color: var(--navy); }
+  .nav-btn.solid:hover { background: var(--gold-lt); }
+  .nav-burger {
+    display: none; width: 40px; height: 40px; padding: 0; cursor: pointer;
+    background: transparent; border: 1px solid rgba(245,247,250,0.28); border-radius: 3px;
+    flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  }
+  .nav-burger span { display: block; width: 18px; height: 2px; background: var(--cream); transition: transform 0.2s, opacity 0.2s; }
+  nav.menu-open .nav-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  nav.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
+  nav.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .nav-menu { display: none; }
   .nav-logo {
     font-family: 'Satoshi', 'Inter', sans-serif;
     font-size: 22px;
@@ -100,17 +128,6 @@
     font-family: 'Inter', sans-serif;
   }
   .lang-btn.active { background: var(--gold); color: var(--navy); }
-  .nav-contact {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--gold);
-    text-decoration: none;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s;
-  }
-  .nav-contact:hover { border-color: var(--gold); }
 
   /* ── HERO */
   .hero {
@@ -214,6 +231,20 @@
     color: var(--gold);
     border-color: rgba(170,181,193,0.3);
   }
+  .hero-tag.pay img { width: 16px; height: 16px; border-radius: 4px; display: inline-block; vertical-align: -4px; margin-inline-end: 5px; }
+
+  /* ── SLOGAN */
+  .hero-slogan {
+    display: inline-flex; align-items: center; gap: 12px; width: fit-content;
+    margin-bottom: 30px; padding: 10px 18px 10px 12px;
+    border: 1px solid rgba(170,181,193,0.35); border-radius: 3px;
+    background: rgba(138,150,163,0.08);
+    font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 900;
+    font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--cream);
+    position: relative;
+  }
+  .hero-slogan img { width: 26px; height: auto; display: block; }
+  body.arabic .hero-slogan { font-family: 'Noto Sans Arabic', sans-serif; letter-spacing: 0; font-size: 16px; padding: 10px 12px 10px 18px; }
 
   .hero-cta {
     display: inline-flex;
@@ -309,6 +340,22 @@
   }
   body.arabic .pillar-title { font-family: 'Noto Sans Arabic', sans-serif; }
   .pillar-text { font-size: 14px; font-weight: 300; color: var(--steel); line-height: 1.9; }
+  .pay-logos { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .pay-logo {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px;
+    background: rgba(245,247,250,0.06); border: 1px solid rgba(170,181,193,0.18); border-radius: 3px;
+    font-size: 13px; font-weight: 500; color: var(--cream);
+  }
+  .pay-logo img { width: 26px; height: 26px; border-radius: 6px; display: block; }
+  body.arabic .pay-logo { padding: 6px 6px 6px 12px; }
+
+  /* ── RISK FINE PRINT */
+  .risk-fineprint {
+    background: var(--teal); padding: 22px 60px 0; margin: 0;
+    font-size: 11px; line-height: 1.7; color: var(--muted); font-weight: 300;
+  }
+  .risk-fineprint strong { color: var(--steel); font-weight: 600; }
+  .risk-fineprint a { color: var(--steel); }
 
   /* ── OLD SCHOOL SECTION */
   .oldschool {
@@ -449,13 +496,28 @@
 
   /* ── RESPONSIVE */
   @media (max-width: 900px) {
-    nav, nav.scrolled { padding: 16px 24px; flex-wrap: wrap; row-gap: 12px; }
-    .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; gap: 14px 20px; }
-    .nav-contact { font-size: 11px; }
-    .nav-logo img { height: 40px; }
+    nav, nav.scrolled { padding: 14px 20px; }
+    nav.menu-open { background: rgba(15,28,58,0.98); }
+    .nav-logo img { height: 34px; }
+    .nav-left .lang-toggle, .nav-links, .nav-btn.ghost { display: none; }
+    .nav-right { gap: 10px; }
+    .nav-btn.solid { height: 40px; padding: 0 14px; font-size: 12px; }
+    .nav-burger { display: inline-flex; }
+    .nav-menu {
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; padding: 4px 20px 22px;
+      background: rgba(15,28,58,0.98); backdrop-filter: blur(8px);
+      border-top: 1px solid rgba(170,181,193,0.12);
+    }
+    nav.menu-open .nav-menu { display: flex; }
+    .nav-menu a {
+      padding: 16px 0; font-size: 16px; color: var(--cream); text-decoration: none;
+      border-bottom: 1px solid rgba(170,181,193,0.1);
+    }
+    .nav-menu .lang-toggle { margin-top: 18px; align-self: flex-start; }
     .hero-title { font-size: clamp(32px, 8vw, 48px); }
     .hero-title .gold-line { font-size: clamp(26px, 7vw, 40px); }
-    .hero { padding: 170px 24px 80px; }
+    .hero { padding: 120px 24px 80px; }
     .pillars { grid-template-columns: 1fr; padding: 80px 24px; }
     .pillar { border-right: none; border-left: none !important; border-bottom: 1px solid rgba(170,181,193,0.12); margin: 0 !important; padding: 0 0 48px 0 !important; }
     .pillar:last-child { border-bottom: none; padding-bottom: 0 !important; }
@@ -467,6 +529,8 @@
     .hero-scroll { left: 24px; }
     body.arabic .hero-scroll { left: auto; right: 24px; }
     .pillars::before, .contact::before, .oldschool::before { left: 24px; right: 24px; }
+    .risk-fineprint { padding: 20px 24px 0; text-align: center; }
+    .hero-slogan { font-size: 12px; letter-spacing: 3px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -480,32 +544,39 @@
   <div class="nav-left">
     <a href="#" class="nav-logo"><img src="trateck-logo-light.svg" alt="Trateck" /></a>
     <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btn-ar" onclick="setLang('ar')">ع</button>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
     </div>
   </div>
-  <div class="nav-links" style="display:flex;align-items:center;gap:20px;">
-    <a href="login.html" class="nav-contact">
-      <span class="lang-en">Client Login</span>
-      <span class="lang-ar">تسجيل الدخول</span>
-    </a>
-    <a href="signup.html" class="nav-contact">
-      <span class="lang-en">Open Account</span>
-      <span class="lang-ar">افتح حساباً</span>
-    </a>
-    <a href="#contact" class="nav-contact">
-      <span class="lang-en">Get in touch</span>
-      <span class="lang-ar">تواصل معنا</span>
-    </a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="about.html" class="nav-link"><span class="lang-en">About</span><span class="lang-ar">من نحن</span></a>
+      <a href="#contact" class="nav-link"><span class="lang-en">Get in touch</span><span class="lang-ar">تواصل معنا</span></a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn ghost"><span class="lang-en">Client Login</span><span class="lang-ar">تسجيل الدخول</span></a>
+      <a href="signup.html" class="nav-btn solid"><span class="lang-en">Open Account</span><span class="lang-ar">افتح حساباً</span></a>
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="nav-menu" id="nav-menu">
+    <a href="login.html"><span class="lang-en">Client Login</span><span class="lang-ar">تسجيل الدخول</span></a>
+    <a href="about.html"><span class="lang-en">About</span><span class="lang-ar">من نحن</span></a>
+    <a href="#contact" onclick="toggleMenu(false)"><span class="lang-en">Get in touch</span><span class="lang-ar">تواصل معنا</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
+    </div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="calm-line"></div>
 
-  <div class="hero-eyebrow">
-    <span class="lang-en">Trading, built right</span>
-    <span class="lang-ar">تداول مبني على أسس صحيحة</span>
+  <div class="hero-slogan">
+    <img src="trateck-mark-grey.svg" alt="" />
+    <span class="lang-en">Regulated by ethics</span>
+    <span class="lang-ar">الأخلاق رقيبُنا</span>
   </div>
 
   <h1 class="hero-title">
@@ -527,11 +598,11 @@
   <div class="hero-tags">
     <span class="hero-tag lang-en">MT5 platform</span>
     <span class="hero-tag lang-en">Forex · Indices · Commodities</span>
-    <span class="hero-tag lang-en">Whish Money &amp; USDT</span>
+    <span class="hero-tag pay lang-en"><img src="whish-money-logo.svg" alt="" /><img src="tether-logo.svg" alt="" />Whish Money &amp; USDT</span>
     <span class="hero-tag highlight lang-en">Grow the right way, not the fast way</span>
     <span class="hero-tag lang-ar">منصة MT5</span>
     <span class="hero-tag lang-ar">عملات · مؤشرات · سلع</span>
-    <span class="hero-tag lang-ar">Whish Money و USDT</span>
+    <span class="hero-tag pay lang-ar"><img src="whish-money-logo.svg" alt="" /><img src="tether-logo.svg" alt="" />Whish Money و USDT</span>
     <span class="hero-tag highlight lang-ar">انمُ بالطريقة الصحيحة، لا بالطريقة السريعة</span>
   </div>
 
@@ -566,6 +637,10 @@
       <span class="lang-en">Funding that fits the region.</span>
       <span class="lang-ar">تمويل يناسب المنطقة.</span>
     </h3>
+    <div class="pay-logos">
+      <span class="pay-logo"><img src="whish-money-logo.svg" alt="" />Whish Money</span>
+      <span class="pay-logo"><img src="tether-logo.svg" alt="" />USDT (Tether)</span>
+    </div>
     <p class="pillar-text">
       <span class="lang-en">Deposit and withdraw with Whish Money or USDT. Every request shows its live status in your portal, from submission to completion.</span>
       <span class="lang-ar">أودِع واسحب عبر Whish Money أو USDT. تظهر حالة كل طلب مباشرةً في بوابتك، من لحظة تقديمه حتى إتمامه.</span>
@@ -650,20 +725,23 @@
   </div>
 </section>
 
-<section style="max-width:900px;margin:0 auto;padding:32px 24px 0;">
-  <div style="background:rgba(232,131,122,0.08);border:1px solid rgba(232,131,122,0.25);padding:20px 24px;font-size:13px;line-height:1.8;color:var(--muted);">
-    <p class="lang-en"><strong style="color:var(--cream);">Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors. You could sustain a loss of some or all of your invested capital, and should not invest money you cannot afford to lose. Past performance is not indicative of future results. Trateck acts as an introducing broker and does not guarantee any profit or protect against loss. Please read our <a href="terms-of-service.html" style="color:var(--gold-lt);">Terms of Service</a> before trading.</p>
-    <p class="lang-ar"><strong style="color:var(--cream);">تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية الأخرى ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين. قد تتكبد خسارة لبعض أو كل رأس مالك المستثمر، ولا ينبغي عليك استثمار أموال لا يمكنك تحمل خسارتها. الأداء السابق لا يشير إلى النتائج المستقبلية. تعمل Trateck كوسيط تعريف ولا تضمن أي ربح أو حماية من الخسارة. يرجى قراءة <a href="terms-of-service.html" style="color:var(--gold-lt);">شروط الخدمة</a> قبل التداول.</p>
-  </div>
-</section>
+<p class="risk-fineprint">
+  <span class="lang-en"><strong>Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors; you could lose some or all of your invested capital. Do not invest money you cannot afford to lose. Past performance is not indicative of future results. Trateck acts as an introducing broker and does not guarantee any profit or protect against loss. <a href="terms-of-service.html">Terms of Service</a></span>
+  <span class="lang-ar"><strong>تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين، وقد تخسر بعض أو كل رأس مالك المستثمر. لا تستثمر أموالاً لا يمكنك تحمّل خسارتها. الأداء السابق لا يضمن النتائج المستقبلية. تعمل Trateck كوسيط تعريف ولا تضمن أي ربح أو حماية من الخسارة. <a href="terms-of-service.html">شروط الخدمة</a></span>
+</p>
 
 <footer>
-  <div class="footer-logo"><img src="trateck-logo-light.svg" alt="Trateck" style="height:20px;width:auto;opacity:0.6;" /></div>
-  <div class="footer-note">© 2026 Trateck · trateck.me · All rights reserved</div>
-  <div class="footer-note" style="margin-top:8px;">
-    <a href="privacy-policy.html" style="color:inherit;opacity:0.7;text-decoration:none;">Privacy Policy</a>
+  <div class="footer-logo"><img src="trateck-logo-light.svg" alt="Trateck" style="height:24px;width:auto;opacity:0.7;" /></div>
+  <div class="footer-note" style="letter-spacing:3px;text-transform:uppercase;font-weight:600;">
+    <span class="lang-en">Regulated by ethics</span><span class="lang-ar">الأخلاق رقيبُنا</span>
+  </div>
+  <div class="footer-note">
+    <a href="about.html" style="color:inherit;opacity:0.8;text-decoration:none;"><span class="lang-en">About</span><span class="lang-ar">من نحن</span></a>
     &nbsp;·&nbsp;
-    <a href="terms-of-service.html" style="color:inherit;opacity:0.7;text-decoration:none;">Terms of Service</a>
+    <a href="privacy-policy.html" style="color:inherit;opacity:0.8;text-decoration:none;"><span class="lang-en">Privacy Policy</span><span class="lang-ar">سياسة الخصوصية</span></a>
+    &nbsp;·&nbsp;
+    <a href="terms-of-service.html" style="color:inherit;opacity:0.8;text-decoration:none;"><span class="lang-en">Terms of Service</span><span class="lang-ar">شروط الخدمة</span></a>
+    <span style="display:block;margin-top:6px;opacity:0.7;">© 2026 Trateck</span>
   </div>
 </footer>
 
@@ -673,24 +751,22 @@
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
+  function toggleMenu(force) {
+    const open = typeof force === 'boolean' ? force : !nav.classList.contains('menu-open');
+    nav.classList.toggle('menu-open', open);
+    document.querySelector('.nav-burger').setAttribute('aria-expanded', String(open));
+  }
+
   function setLang(lang) {
     const body = document.getElementById('body');
-    const btnEn = document.getElementById('btn-en');
-    const btnAr = document.getElementById('btn-ar');
-    if (lang === 'ar') {
-      body.classList.add('arabic');
-      body.setAttribute('dir', 'rtl');
-      body.setAttribute('lang', 'ar');
-      btnAr.classList.add('active');
-      btnEn.classList.remove('active');
-    } else {
-      body.classList.remove('arabic');
-      body.setAttribute('dir', 'ltr');
-      body.setAttribute('lang', 'en');
-      btnEn.classList.add('active');
-      btnAr.classList.remove('active');
-    }
+    const ar = lang === 'ar';
+    body.classList.toggle('arabic', ar);
+    body.setAttribute('dir', ar ? 'rtl' : 'ltr');
+    body.setAttribute('lang', ar ? 'ar' : 'en');
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    try { localStorage.setItem('preferred_lang', lang); } catch (e) { /* storage unavailable */ }
   }
+  try { if (localStorage.getItem('preferred_lang') === 'ar') setLang('ar'); } catch (e) { /* storage unavailable */ }
 </script>
 
 </body>

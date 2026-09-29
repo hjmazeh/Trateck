@@ -318,7 +318,8 @@
     transition: border-color 0.15s, background 0.15s;
     font-family: 'Inter', sans-serif;
   }
-  .funding-method-btn:hover { border-color: var(--gold); background: var(--navy-lt); }
+  .funding-method-btn:hover, .funding-method-btn.selected { border-color: var(--gold); background: var(--navy-lt); }
+  .method-icon { width: 16px; height: 16px; border-radius: 4px; vertical-align: -3px; margin-inline-end: 4px; }
   .funding-select {
     width: 100%; background: var(--teal); border: 1px solid var(--line); color: var(--cream);
     padding: 12px 14px; font-size: 14px; font-family: 'Inter', sans-serif;
@@ -658,10 +659,17 @@
         <div class="funding-form-group">
           <label class="funding-label lang-ar">طريقة السحب</label>
           <label class="funding-label lang-en">Withdrawal Method</label>
-          <select id="withdraw-method" class="funding-select" onchange="onWithdrawMethodChange()">
-            <option value="Whish Money">Whish Money</option>
-            <option value="USDT">USDT</option>
-          </select>
+          <input type="hidden" id="withdraw-method" value="Whish Money">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="funding-method-btn withdraw-method-btn selected" data-method="Whish Money" style="display:flex;align-items:center;justify-content:center;gap:10px;" onclick="selectWithdrawMethod('Whish Money')">
+              <img src="whish-money-logo.svg" alt="" style="height:30px;width:30px;flex-shrink:0;display:block;border-radius:7px;">
+              Whish Money
+            </button>
+            <button type="button" class="funding-method-btn withdraw-method-btn" data-method="USDT" style="display:flex;align-items:center;justify-content:center;gap:10px;" onclick="selectWithdrawMethod('USDT')">
+              <img src="tether-logo.svg" alt="" style="height:26px;width:26px;flex-shrink:0;display:block;">
+              USDT
+            </button>
+          </div>
         </div>
         <div class="funding-form-group" id="withdraw-whish-fields">
           <label class="funding-label lang-ar">رقم الهاتف لاستلام المبلغ</label>
@@ -1147,6 +1155,12 @@
       }
     };
 
+    window.selectWithdrawMethod = function(method) {
+      document.getElementById('withdraw-method').value = method;
+      document.querySelectorAll('.withdraw-method-btn').forEach(b => b.classList.toggle('selected', b.dataset.method === method));
+      onWithdrawMethodChange();
+    };
+
     window.onWithdrawMethodChange = function() {
       const method = document.getElementById('withdraw-method').value;
       document.getElementById('withdraw-whish-fields').style.display = method === 'Whish Money' ? 'block' : 'none';
@@ -1401,6 +1415,12 @@
       return `<span class="history-status ${s.cls}"><span class="lang-ar">${s.ar}</span><span class="lang-en">${s.en}</span></span>`;
     }
 
+    function methodIcon(method) {
+      if (method === 'Whish Money') return '<img class="method-icon" src="whish-money-logo.svg" alt="">';
+      if (method === 'USDT') return '<img class="method-icon" src="tether-logo.svg" alt="">';
+      return '';
+    }
+
     function renderHistoryRow(r) {
       const type = r._type;
       const dateStr = formatHistoryDate(r.resolved_at || r.created_at);
@@ -1411,7 +1431,7 @@
         return `
           <div class="history-row">
             <div>
-              <div class="history-meta">${amountLine} — ${escapeHtml(r.method || 'Whish Money')} <span class="lang-ar">(إيداع)</span><span class="lang-en">(Deposit)</span></div>
+              <div class="history-meta">${amountLine} — ${methodIcon(r.method || 'Whish Money')}${escapeHtml(r.method || 'Whish Money')} <span class="lang-ar">(إيداع)</span><span class="lang-en">(Deposit)</span></div>
               <div class="history-sub">MT5 ${escapeHtml(r.mt5_login || '—')} · ${dateStr}${r.rejection_reason ? ' — ' + escapeHtml(r.rejection_reason) : ''}</div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;">
@@ -1423,7 +1443,7 @@
       return `
         <div class="history-row">
           <div>
-            <div class="history-meta">$${r.amount} — ${escapeHtml(r.method || '')} <span class="lang-ar">(سحب)</span><span class="lang-en">(Withdrawal)</span></div>
+            <div class="history-meta">$${r.amount} — ${methodIcon(r.method)}${escapeHtml(r.method || '')} <span class="lang-ar">(سحب)</span><span class="lang-en">(Withdrawal)</span></div>
             <div class="history-sub">MT5 ${escapeHtml(r.mt5_login || '—')} · ${dateStr}${r.rejection_reason ? ' — ' + escapeHtml(r.rejection_reason) : ''}</div>
           </div>
           <div style="display:flex;align-items:center;gap:10px;">

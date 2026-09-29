@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Trateck</title>
+<meta name="description" content="In the market since 2008. We've seen it all. Trateck — regulated by ethics.">
+<link rel="icon" type="image/svg+xml" href="trateck-favicon.svg">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900,300i,400i,500i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:    #0F1C3A;
+    --teal:    #1D3162;
+    --gold:    #AAB5C1;
+    --gold-lt: #D4DAE1;
+    --cream:   #F5F7FA;
+    --steel:   #8A96A3;
+    --muted:   #8A96A3;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--navy); color: var(--cream); line-height: 1.6; overflow-x: hidden; }
+  body.arabic { font-family: 'Noto Sans Arabic', sans-serif; direction: rtl; text-align: right; }
+  .lang-en { display: block; } .lang-ar { display: none; }
+  body.arabic .lang-en { display: none; } body.arabic .lang-ar { display: block; }
+  span.lang-en { display: inline; } span.lang-ar { display: none; }
+  body.arabic span.lang-en { display: none; } body.arabic span.lang-ar { display: inline; }
+  .display { font-family: 'Satoshi', 'Inter', sans-serif; }
+  body.arabic .display { font-family: 'Noto Sans Arabic', sans-serif; }
+
+  /* ── NAV (same as the homepage) */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 60px; background: transparent; transition: background 0.4s, padding 0.3s;
+  }
+  nav.scrolled { background: rgba(15,28,58,0.95); backdrop-filter: blur(8px); padding: 16px 60px; }
+  .nav-left { display: flex; align-items: center; gap: 20px; }
+  .nav-logo img { height: 55px; width: auto; display: block; }
+  .lang-toggle { display: flex; align-items: center; background: rgba(170,181,193,0.1); border: 1px solid rgba(170,181,193,0.25); border-radius: 4px; overflow: hidden; }
+  .lang-btn { padding: 5px 12px; font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted); background: transparent; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--gold); color: var(--navy); }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-link { font-size: 13px; font-weight: 500; letter-spacing: 0.3px; color: var(--cream); opacity: 0.8; text-decoration: none; }
+  .nav-link:hover, .nav-link.current { opacity: 1; }
+  .nav-link.current { border-bottom: 1px solid var(--gold); padding-bottom: 2px; }
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  .nav-btn { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 18px; border-radius: 3px; font-size: 13px; font-weight: 600; letter-spacing: 0.3px; white-space: nowrap; text-decoration: none; }
+  .nav-btn.ghost { color: var(--cream); border: 1px solid rgba(245,247,250,0.28); }
+  .nav-btn.ghost:hover { border-color: var(--cream); }
+  .nav-btn.solid { background: var(--gold); color: var(--navy); }
+  .nav-btn.solid:hover { background: var(--gold-lt); }
+  .nav-burger { display: none; width: 40px; height: 40px; padding: 0; cursor: pointer; background: transparent; border: 1px solid rgba(245,247,250,0.28); border-radius: 3px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .nav-burger span { display: block; width: 18px; height: 2px; background: var(--cream); transition: transform 0.2s, opacity 0.2s; }
+  nav.menu-open .nav-burger span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  nav.menu-open .nav-burger span:nth-child(2) { opacity: 0; }
+  nav.menu-open .nav-burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+  .nav-menu { display: none; }
+
+  /* ── HERO */
+  .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; padding: 140px 60px 90px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 40%, rgba(29,49,98,0.7) 0%, transparent 60%); pointer-events: none; }
+  .hero-mark { position: absolute; right: -60px; top: 50%; transform: translateY(-50%); width: min(46vw, 560px); opacity: 0.06; pointer-events: none; }
+  body.arabic .hero-mark { right: auto; left: -60px; }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 26px; display: flex; align-items: center; gap: 12px; position: relative; }
+  .eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+  .hero h1 { font-size: clamp(44px, 7vw, 92px); font-weight: 400; line-height: 1.05; letter-spacing: -1px; max-width: 900px; margin-bottom: 18px; position: relative; }
+  .hero h1 .strong { display: block; font-weight: 900; letter-spacing: -0.5px; color: var(--gold-lt); }
+  body.arabic .hero h1 { line-height: 1.35; letter-spacing: 0; }
+  .hero-sub { font-size: clamp(16px, 2vw, 21px); font-weight: 300; color: var(--steel); max-width: 620px; line-height: 1.7; position: relative; }
+  .years { display: flex; gap: 48px; margin-top: 48px; position: relative; flex-wrap: wrap; }
+  .years div { border-inline-start: 1px solid rgba(170,181,193,0.25); padding-inline-start: 18px; }
+  .years b { display: block; font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 900; font-size: 34px; color: var(--cream); line-height: 1.1; }
+  .years span { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  body.arabic .years span { letter-spacing: 0; }
+
+  /* ── TIMELINE */
+  .timeline-wrap { background: var(--teal); padding: 110px 60px; }
+  .section-head { max-width: 760px; margin-bottom: 64px; }
+  .section-head h2 { font-size: clamp(30px, 4vw, 48px); font-weight: 400; line-height: 1.2; margin-bottom: 14px; }
+  .section-head p { font-size: 16px; font-weight: 300; color: var(--steel); line-height: 1.8; }
+  .timeline { list-style: none; position: relative; max-width: 980px; }
+  .timeline::before { content: ''; position: absolute; top: 6px; bottom: 6px; inset-inline-start: 110px; width: 1px; background: rgba(170,181,193,0.25); }
+  .timeline li { display: grid; grid-template-columns: 110px 1fr; gap: 0 44px; padding-bottom: 44px; position: relative; }
+  .timeline li:last-child { padding-bottom: 0; }
+  .timeline li::before { content: ''; position: absolute; top: 9px; inset-inline-start: 106px; width: 9px; height: 9px; border-radius: 50%; background: var(--navy); border: 1px solid var(--gold); }
+  .timeline .yr { font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 900; font-size: 26px; color: var(--gold-lt); line-height: 1.2; }
+  .timeline h3 { font-size: 20px; font-weight: 500; margin-bottom: 6px; }
+  .timeline p { font-size: 15px; font-weight: 300; color: var(--steel); line-height: 1.8; }
+  .timeline .lesson { color: var(--cream); opacity: 0.85; }
+  .timeline li.today .yr { color: var(--cream); }
+  .timeline li.today::before { background: var(--gold); }
+
+  /* ── PRINCIPLES */
+  .principles { padding: 110px 60px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .principle { border-top: 1px solid rgba(170,181,193,0.25); padding-top: 28px; }
+  .principle .num { font-family: 'Satoshi', 'Inter', sans-serif; font-size: 13px; letter-spacing: 3px; color: var(--gold); margin-bottom: 18px; }
+  .principle h3 { font-size: 24px; font-weight: 500; margin-bottom: 12px; }
+  .principle p { font-size: 15px; font-weight: 300; color: var(--steel); line-height: 1.85; }
+
+  /* ── REGULATED BY ETHICS */
+  .ethics { background: var(--teal); padding: 120px 60px; text-align: center; position: relative; overflow: hidden; }
+  .ethics img { width: 64px; margin: 0 auto 30px; display: block; opacity: 0.9; }
+  .ethics h2 { font-weight: 900; font-size: clamp(34px, 5.5vw, 68px); letter-spacing: 6px; text-transform: uppercase; line-height: 1.1; margin-bottom: 30px; }
+  body.arabic .ethics h2 { letter-spacing: 0; font-weight: 700; }
+  .ethics p { font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: var(--gold-lt); max-width: 720px; margin: 0 auto; line-height: 1.85; }
+
+  /* ── CTA */
+  .cta { padding: 110px 60px; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+  .cta h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 400; line-height: 1.25; max-width: 560px; }
+  .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cta .nav-btn { height: 50px; padding: 0 28px; font-size: 14px; }
+
+  /* ── FINE PRINT + FOOTER */
+  .risk-fineprint { background: var(--teal); padding: 22px 60px 0; font-size: 11px; line-height: 1.7; color: var(--muted); font-weight: 300; }
+  .risk-fineprint strong { color: var(--steel); font-weight: 600; }
+  .risk-fineprint a { color: var(--steel); }
+  footer { padding: 32px 60px; background: var(--teal); display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(170,181,193,0.1); }
+  .footer-note { font-size: 12px; color: var(--muted); font-weight: 300; }
+  .footer-note a { color: inherit; opacity: 0.8; text-decoration: none; }
+
+  @media (max-width: 900px) {
+    nav, nav.scrolled { padding: 14px 20px; }
+    nav.menu-open { background: rgba(15,28,58,0.98); }
+    .nav-logo img { height: 34px; }
+    .nav-left .lang-toggle, .nav-links, .nav-btn.ghost { display: none; }
+    .nav-right { gap: 10px; }
+    .nav-actions .nav-btn.solid { height: 40px; padding: 0 14px; font-size: 12px; }
+    .nav-burger { display: inline-flex; }
+    .nav-menu { position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; padding: 4px 20px 22px; background: rgba(15,28,58,0.98); backdrop-filter: blur(8px); border-top: 1px solid rgba(170,181,193,0.12); }
+    nav.menu-open .nav-menu { display: flex; }
+    .nav-menu a { padding: 16px 0; font-size: 16px; color: var(--cream); text-decoration: none; border-bottom: 1px solid rgba(170,181,193,0.1); }
+    .nav-menu .lang-toggle { margin-top: 18px; align-self: flex-start; }
+    .hero { padding: 120px 24px 70px; min-height: auto; }
+    .years { gap: 28px; }
+    .timeline-wrap, .principles, .ethics, .cta { padding-left: 24px; padding-right: 24px; }
+    .timeline-wrap, .principles, .ethics, .cta { padding-top: 80px; padding-bottom: 80px; }
+    .timeline::before { inset-inline-start: 4px; }
+    .timeline li { grid-template-columns: 1fr; padding-inline-start: 30px; }
+    .timeline li::before { inset-inline-start: 0; }
+    .timeline .yr { font-size: 22px; margin-bottom: 4px; }
+    .principles { grid-template-columns: 1fr; gap: 36px; }
+    .cta { flex-direction: column; align-items: flex-start; }
+    .risk-fineprint { padding: 20px 24px 0; text-align: center; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body id="body">
+
+<nav id="nav">
+  <div class="nav-left">
+    <a href="index.html" class="nav-logo"><img src="trateck-logo-light.svg" alt="Trateck" /></a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="about.html" class="nav-link current"><span class="lang-en">About</span><span class="lang-ar">من نحن</span></a>
+      <a href="index.html#contact" class="nav-link"><span class="lang-en">Get in touch</span><span class="lang-ar">تواصل معنا</span></a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn ghost"><span class="lang-en">Client Login</span><span class="lang-ar">تسجيل الدخول</span></a>
+      <a href="signup.html" class="nav-btn solid"><span class="lang-en">Open Account</span><span class="lang-ar">افتح حساباً</span></a>
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="nav-menu" id="nav-menu">
+    <a href="login.html"><span class="lang-en">Client Login</span><span class="lang-ar">تسجيل الدخول</span></a>
+    <a href="index.html"><span class="lang-en">Home</span><span class="lang-ar">الرئيسية</span></a>
+    <a href="index.html#contact"><span class="lang-en">Get in touch</span><span class="lang-ar">تواصل معنا</span></a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">ع</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <img class="hero-mark" src="trateck-mark-white.svg" alt="" />
+  <div class="eyebrow"><span class="lang-en">About Trateck</span><span class="lang-ar">عن Trateck</span></div>
+  <h1 class="display">
+    <span class="lang-en">In the market since 2008.<span class="strong">We've seen it all.</span></span>
+    <span class="lang-ar">في الأسواق منذ 2008.<span class="strong">رأينا كل شيء.</span></span>
+  </h1>
+  <p class="hero-sub">
+    <span class="lang-en">Crashes and rallies. Pegs that broke overnight and rates that climbed faster than anyone expected. Every cycle taught us something about what traders actually need, and what they never needed at all.</span>
+    <span class="lang-ar">انهيارات وارتفاعات. عملات ربطٍ انكسرت بين ليلة وضحاها، وأسعار فائدة صعدت أسرع مما توقّعه أحد. كل دورة علّمتنا شيئاً عمّا يحتاجه المتداول فعلاً، وعمّا لم يحتجه يوماً.</span>
+  </p>
+  <div class="years">
+    <div><b>2008</b><span class="lang-en">In the market since</span><span class="lang-ar">في السوق منذ</span></div>
+    <div><b>MT5</b><span class="lang-en">Trading platform</span><span class="lang-ar">منصة التداول</span></div>
+    <div><b>24/5</b><span class="lang-en">Markets we watch</span><span class="lang-ar">أسواق نراقبها</span></div>
+  </div>
+</section>
+
+<section class="timeline-wrap">
+  <div class="section-head">
+    <h2 class="display"><span class="lang-en">We were there.</span><span class="lang-ar">كنّا هناك.</span></h2>
+    <p><span class="lang-en">Anyone can trade a calm market. What shapes a team is the days when it isn't calm. These are some of the moments we lived through, and what each one left us with.</span><span class="lang-ar">أيّ أحد يستطيع التداول في سوق هادئ. ما يصنع الفريق هو الأيام التي لا يكون فيها السوق هادئاً. هذه بعض اللحظات التي عشناها، وما تركته كلٌّ منها فينا.</span></p>
+  </div>
+  <ol class="timeline">
+    <li>
+      <div class="yr">2008</div>
+      <div>
+        <h3><span class="lang-en">The global financial crisis</span><span class="lang-ar">الأزمة المالية العالمية</span></h3>
+        <p><span class="lang-en">Banks that looked permanent disappeared in a weekend.</span><span class="lang-ar">مصارف بدت راسخة إلى الأبد اختفت في عطلة نهاية أسبوع.</span> <span class="lesson"><span class="lang-en">Lesson: size and reputation are not safety. Risk management is.</span><span class="lang-ar">الدرس: الحجم والسمعة ليسا أماناً. إدارة المخاطر هي الأمان.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2011</div>
+      <div>
+        <h3><span class="lang-en">The euro debt crisis</span><span class="lang-ar">أزمة ديون منطقة اليورو</span></h3>
+        <p><span class="lang-en">Headlines moved currencies more than charts did.</span><span class="lang-ar">حرّكت العناوين الإخبارية العملات أكثر مما حرّكتها الرسوم البيانية.</span> <span class="lesson"><span class="lang-en">Lesson: traders need context, not just prices.</span><span class="lang-ar">الدرس: المتداول يحتاج إلى السياق، لا إلى الأسعار فقط.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2015</div>
+      <div>
+        <h3><span class="lang-en">The Swiss franc shock</span><span class="lang-ar">صدمة الفرنك السويسري</span></h3>
+        <p><span class="lang-en">A currency floor everyone trusted was removed without warning, and the franc moved in minutes what it usually moves in years.</span><span class="lang-ar">أُلغي حدٌّ أدنى للعملة كان الجميع يثق به دون أي إنذار، فتحرّك الفرنك في دقائق ما يتحرّكه عادةً في سنوات.</span> <span class="lesson"><span class="lang-en">Lesson: "that can't happen" is not a risk plan.</span><span class="lang-ar">الدرس: "هذا لا يمكن أن يحدث" ليست خطة لإدارة المخاطر.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2016</div>
+      <div>
+        <h3><span class="lang-en">The Brexit vote</span><span class="lang-ar">تصويت خروج بريطانيا</span></h3>
+        <p><span class="lang-en">Sterling fell to levels not seen in decades in a single night.</span><span class="lang-ar">هبط الجنيه الإسترليني في ليلة واحدة إلى مستويات لم يشهدها منذ عقود.</span> <span class="lesson"><span class="lang-en">Lesson: be reachable on the nights that matter.</span><span class="lang-ar">الدرس: كن متاحاً في الليالي المهمّة.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2020</div>
+      <div>
+        <h3><span class="lang-en">The pandemic crash</span><span class="lang-ar">انهيار الجائحة</span></h3>
+        <p><span class="lang-en">Markets fell faster than ever recorded, and oil futures traded below zero.</span><span class="lang-ar">هبطت الأسواق بأسرع وتيرة مسجّلة، وتداولت عقود النفط الآجلة بأسعار سالبة.</span> <span class="lesson"><span class="lang-en">Lesson: the unthinkable is part of the job.</span><span class="lang-ar">الدرس: ما لا يُتصوَّر جزء من العمل.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2022</div>
+      <div>
+        <h3><span class="lang-en">The fastest rate hikes in decades</span><span class="lang-ar">أسرع رفع لأسعار الفائدة منذ عقود</span></h3>
+        <p><span class="lang-en">A decade of cheap money ended in a few months.</span><span class="lang-ar">انتهى عقدٌ من المال الرخيص في بضعة أشهر.</span> <span class="lesson"><span class="lang-en">Lesson: conditions change; clear terms shouldn't.</span><span class="lang-ar">الدرس: الظروف تتغيّر، أما الشروط الواضحة فلا ينبغي أن تتغيّر.</span></span></p>
+      </div>
+    </li>
+    <li>
+      <div class="yr">2023</div>
+      <div>
+        <h3><span class="lang-en">Bank failures, again</span><span class="lang-ar">انهيار المصارف، مجدداً</span></h3>
+        <p><span class="lang-en">Fifteen years after 2008, trust was tested one more time.</span><span class="lang-ar">بعد خمسة عشر عاماً على 2008، وُضعت الثقة على المحكّ مرة أخرى.</span> <span class="lesson"><span class="lang-en">Lesson: trust is earned daily, not declared once.</span><span class="lang-ar">الدرس: الثقة تُكسب يومياً، ولا تُعلَن مرة واحدة.</span></span></p>
+      </div>
+    </li>
+    <li class="today">
+      <div class="yr"><span class="lang-en">Today</span><span class="lang-ar">اليوم</span></div>
+      <div>
+        <h3><span class="lang-en">Trateck</span><span class="lang-ar">Trateck</span></h3>
+        <p><span class="lang-en">Everything those years taught us, built into one place: the systems, the ethics, the marketing and the technology behind trading brands, and a portal that treats every trader like the only one.</span><span class="lang-ar">كل ما علّمتنا إياه تلك السنوات، مجتمعاً في مكان واحد: الأنظمة، والأخلاقيات، والتسويق، والتكنولوجيا التي تقف خلف العلامات التجارية في عالم التداول، وبوابة تعامل كل متداول كأنه الوحيد.</span></p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="principles">
+  <div class="principle">
+    <div class="num">01</div>
+    <h3 class="display"><span class="lang-en">Systems, not shortcuts.</span><span class="lang-ar">أنظمة، لا طرق مختصرة.</span></h3>
+    <p><span class="lang-en">Every deposit, withdrawal and account request follows the same tracked process, visible to you in real time. Nothing depends on someone remembering.</span><span class="lang-ar">كل إيداع وسحب وطلب حساب يمرّ بالإجراء نفسه وبشكل موثّق، وتراه أنت مباشرةً. لا شيء يعتمد على ذاكرة أحد.</span></p>
+  </div>
+  <div class="principle">
+    <div class="num">02</div>
+    <h3 class="display"><span class="lang-en">Ethics, not hype.</span><span class="lang-ar">أخلاق، لا مبالغة.</span></h3>
+    <p><span class="lang-en">No guaranteed profits, no pressure, no promises the market can't keep. We would rather lose a sign-up than win one with a claim we can't stand behind.</span><span class="lang-ar">لا أرباح مضمونة، لا ضغوط، ولا وعود لا يستطيع السوق الوفاء بها. نفضّل أن نخسر تسجيلاً على أن نكسبه بادعاء لا نستطيع الوقوف خلفه.</span></p>
+  </div>
+  <div class="principle">
+    <div class="num">03</div>
+    <h3 class="display"><span class="lang-en">People, not tickets.</span><span class="lang-ar">أشخاص، لا تذاكر.</span></h3>
+    <p><span class="lang-en">When markets move fast, you talk to someone who knows your account, not a bot or a queue. We learned in 2008 how much that matters.</span><span class="lang-ar">حين تتحرّك الأسواق بسرعة، تتحدّث إلى شخص يعرف حسابك، لا إلى روبوت أو طابور انتظار. تعلّمنا في 2008 كم يهمّ ذلك.</span></p>
+  </div>
+</section>
+
+<section class="ethics">
+  <img src="trateck-mark-grey.svg" alt="" />
+  <h2 class="display"><span class="lang-en">Regulated by ethics.</span><span class="lang-ar">الأخلاق رقيبُنا.</span></h2>
+  <p>
+    <span class="lang-en">Rules tell a company what it must do. Ethics decide what it does when no one is checking. After everything we have seen since 2008, that is the standard we hold ourselves to: clear conditions, honest numbers, and treating your money the way we would treat our own.</span>
+    <span class="lang-ar">القوانين تخبر الشركة بما يجب عليها فعله. أما الأخلاق فتحدّد ما تفعله حين لا يراقبها أحد. بعد كل ما رأيناه منذ 2008، هذا هو المعيار الذي نلتزم به: شروط واضحة، وأرقام صادقة، ومعاملة أموالك كما نعامل أموالنا.</span>
+  </p>
+</section>
+
+<section class="cta">
+  <h2 class="display"><span class="lang-en">Eighteen years of markets. One account away.</span><span class="lang-ar">ثمانية عشر عاماً في الأسواق. على بُعد حساب واحد.</span></h2>
+  <div class="cta-actions">
+    <a href="signup.html" class="nav-btn solid"><span class="lang-en">Open your account</span><span class="lang-ar">افتح حسابك</span></a>
+    <a href="index.html#contact" class="nav-btn ghost"><span class="lang-en">Get in touch</span><span class="lang-ar">تواصل معنا</span></a>
+  </div>
+</section>
+
+<p class="risk-fineprint">
+  <span class="lang-en"><strong>Risk Warning:</strong> Trading foreign exchange and other leveraged financial instruments carries a high level of risk and may not be suitable for all investors; you could lose some or all of your invested capital. Do not invest money you cannot afford to lose. Past performance is not indicative of future results. Trateck acts as an introducing broker and does not guarantee any profit or protect against loss. <a href="terms-of-service.html">Terms of Service</a></span>
+  <span class="lang-ar"><strong>تحذير من المخاطر:</strong> ينطوي تداول العملات الأجنبية والأدوات المالية ذات الرافعة المالية على مستوى عالٍ من المخاطر وقد لا يكون مناسباً لجميع المستثمرين، وقد تخسر بعض أو كل رأس مالك المستثمر. لا تستثمر أموالاً لا يمكنك تحمّل خسارتها. الأداء السابق لا يضمن النتائج المستقبلية. تعمل Trateck كوسيط تعريف ولا تضمن أي ربح أو حماية من الخسارة. <a href="terms-of-service.html">شروط الخدمة</a></span>
+</p>
+
+<footer>
+  <div><img src="trateck-logo-light.svg" alt="Trateck" style="height:24px;width:auto;opacity:0.7;display:block;" /></div>
+  <div class="footer-note" style="letter-spacing:3px;text-transform:uppercase;font-weight:600;"><span class="lang-en">Regulated by ethics</span><span class="lang-ar">الأخلاق رقيبُنا</span></div>
+  <div class="footer-note">
+    <a href="index.html"><span class="lang-en">Home</span><span class="lang-ar">الرئيسية</span></a>
+    &nbsp;·&nbsp;
+    <a href="privacy-policy.html"><span class="lang-en">Privacy Policy</span><span class="lang-ar">سياسة الخصوصية</span></a>
+    &nbsp;·&nbsp;
+    <a href="terms-of-service.html"><span class="lang-en">Terms of Service</span><span class="lang-ar">شروط الخدمة</span></a>
+    <span style="display:block;margin-top:6px;opacity:0.7;">© 2026 Trateck</span>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  function toggleMenu(force) {
+    const open = typeof force === 'boolean' ? force : !nav.classList.contains('menu-open');
+    nav.classList.toggle('menu-open', open);
+    document.querySelector('.nav-burger').setAttribute('aria-expanded', String(open));
+  }
+
+  function setLang(lang) {
+    const body = document.getElementById('body');
+    const ar = lang === 'ar';
+    body.classList.toggle('arabic', ar);
+    body.setAttribute('dir', ar ? 'rtl' : 'ltr');
+    body.setAttribute('lang', ar ? 'ar' : 'en');
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    try { localStorage.setItem('preferred_lang', lang); } catch (e) { /* storage unavailable */ }
+  }
+  try { if (localStorage.getItem('preferred_lang') === 'ar') setLang('ar'); } catch (e) { /* storage unavailable */ }
+</script>
+
+</body>
+</html>

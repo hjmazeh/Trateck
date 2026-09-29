@@ -609,7 +609,7 @@
       const fromUrl = new URLSearchParams(location.search).get('ib');
       if (fromUrl) return fromUrl;
       const saved = JSON.parse(localStorage.getItem('trateck_ib') || 'null');
-      if (saved && Date.now() - saved.at < 30 * 24 * 3600 * 1000) return saved.code;
+      if (saved && Date.now() - saved.at < 3 * 24 * 3600 * 1000) return saved.code;
     } catch (e) { /* storage unavailable */ }
     return null;
   }
@@ -903,7 +903,7 @@
   } catch (e) { /* localStorage unavailable -- stays on the default */ }
 </script>
 <script>
-  // Remember an IB partner link (?ib=CODE) for 30 days, so an IB can share any Trateck page.
+  // Remember an IB partner link (?ib=CODE) for 3 days, so an IB can share any Trateck page.
   (function () {
     try {
       var code = new URLSearchParams(location.search).get('ib');

@@ -11,6 +11,12 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.is_admin == true;
     }
 
+    // Marketing staff: not admins (no client data at all) -- only the ads.
+    function isMarketing() {
+      return isSignedIn() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', null) == 'marketing';
+    }
+
     // The IB a client is tagged with at signup must match the partner link
     // they used (or be the built-in Retail fallback when no link resolved),
     // so a client can't hand-pick an IB, product or MT5 group.
@@ -35,7 +41,16 @@ service cloud.firestore {
     // Staff activity log -- append-only in practice.
     match /admin_logs/{logId} {
       allow read: if isAdmin();
-      allow create: if isAdmin();
+      allow create: if isAdmin() || isMarketing();
+    }
+
+    // Marketing ads shown on the homepage and in the portal. Anyone
+    // (signed in or not) can read an ad that's switched on -- the site
+    // queries `where active == true` -- while drafts and switched-off ads
+    // stay visible to staff only.
+    match /ads/{adId} {
+      allow get, list: if resource.data.active == true || isAdmin() || isMarketing();
+      allow create, update, delete: if isAdmin() || isMarketing();
     }
 
     // IB records (main IBs and sub-IBs, with their products). Staff only.
@@ -102,6 +117,7 @@ service cloud.firestore {
         isOwner()
         && request.resource.data.uid == userId
         && (!('is_admin' in request.resource.data) || request.resource.data.is_admin == false)
+        && !('role' in request.resource.data)
         && request.resource.data.status == 'pending'
         && request.resource.data.mt5_login == null
         && request.resource.data.mt5_password == null
@@ -114,6 +130,7 @@ service cloud.firestore {
       allow update: if isAdmin() || (
         isOwner() &&
         unchanged('is_admin') &&
+        unchanged('role') &&
         unchanged('mt5_login') &&
         unchanged('mt5_password') &&
         unchanged('mt5_server') &&

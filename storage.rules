@@ -5,6 +5,18 @@ service firebase.storage {
       return request.auth != null &&
         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.is_admin == true;
     }
+    function isMarketing() {
+      return request.auth != null &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.get('role', null) == 'marketing';
+    }
+
+    // Ad images (homepage/portal): public, uploaded by admins or marketing.
+    match /ads/{adId}/{fileName} {
+      allow read: if true;
+      allow write: if (isAdmin() || isMarketing())
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
 
     match /kyc/{userId}/{fileName} {
       allow read: if request.auth != null && request.auth.uid == userId;

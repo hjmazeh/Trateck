@@ -532,9 +532,63 @@
   @media (prefers-reduced-motion: reduce) {
     .hero-scroll-line { animation: none; }
   }
+
+  /* ── ADS (managed from the staff panel's Ads page) */
+  .ad-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    min-height: 40px; padding: 8px 48px;
+    background: var(--gold); color: var(--navy);
+    font-size: 13px; font-weight: 500; text-align: center; line-height: 1.4;
+  }
+  .ad-bar[hidden], .ad-home[hidden] { display: none; }
+  .ad-bar a.ad-bar-link { color: var(--navy); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+  .ad-bar-close {
+    position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
+    width: 28px; height: 28px; border: none; background: transparent; cursor: pointer;
+    color: var(--navy); font-size: 20px; line-height: 1; opacity: 0.7;
+  }
+  .ad-bar-close:hover { opacity: 1; }
+  body.arabic .ad-bar-close { right: auto; left: 14px; }
+  body.has-ad-bar nav { top: var(--ad-bar-h, 40px); }
+  body.has-ad-bar .hero { margin-top: var(--ad-bar-h, 40px); }
+
+  .ad-home {
+    display: flex; align-items: center; gap: 48px;
+    max-width: 960px; margin: 0 auto; padding: 40px 60px 100px;
+  }
+  .ad-home-img {
+    width: 270px; flex-shrink: 0; aspect-ratio: 9 / 16; object-fit: cover;
+    border-radius: 10px; border: 1px solid rgba(170,181,193,0.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  }
+  .ad-home-body { flex: 1; min-width: 0; }
+  .ad-home-text {
+    font-family: 'Satoshi', 'Inter', sans-serif; font-size: clamp(20px, 2.6vw, 28px); font-weight: 500;
+    line-height: 1.45; color: var(--cream); margin-bottom: 28px; white-space: pre-line;
+  }
+  body.arabic .ad-home-text { font-family: 'Noto Sans Arabic', sans-serif; }
+  .ad-home-btn {
+    display: inline-block; padding: 14px 32px; background: var(--gold); color: var(--navy);
+    font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .ad-home-btn:hover { background: var(--gold-lt); }
+  body.arabic .ad-home-btn { letter-spacing: 0; }
+  @media (max-width: 768px) {
+    .ad-bar { padding: 8px 44px; font-size: 12px; flex-wrap: wrap; gap: 4px 10px; }
+    .ad-home { flex-direction: column; gap: 28px; padding: 24px 24px 72px; text-align: center; }
+    body.arabic .ad-home { text-align: center; }
+    .ad-home-img { width: min(260px, 72vw); }
+  }
 </style>
 </head>
 <body id="body">
+
+<div class="ad-bar" id="ad-bar" hidden>
+  <span id="ad-bar-text"></span>
+  <button class="ad-bar-close" type="button" aria-label="Close" onclick="dismissAdBar()">×</button>
+</div>
 
 <nav id="nav">
   <div class="nav-left">
@@ -614,6 +668,8 @@
     <span class="lang-ar">تمرير</span>
   </div>
 </section>
+
+<section class="ad-home" id="ad-home" hidden></section>
 
 <section class="pillars">
   <div class="pillar">
@@ -775,6 +831,71 @@
       }
     } catch (e) { /* storage unavailable */ }
   })();
+</script>
+
+<script type="module">
+  // Marketing ads: the announcement bar across the top and the card under
+  // the hero. Nothing shows (and nothing breaks) if there are none.
+  import { loadLiveAds, pickAd, bilingual, applyAdLink } from './ads.js';
+
+  let ads = [];
+  try { ads = await loadLiveAds(); } catch (e) { /* no ads this time */ }
+
+  const bar = pickAd(ads, 'place_bar');
+  const barKey = bar ? `${bar.id}:${bar.updated_at || ''}` : null;
+  let barDismissed = false;
+  try { barDismissed = !!barKey && localStorage.getItem('trateck_ad_bar_dismissed') === barKey; } catch (e) { /* storage unavailable */ }
+  if (bar && !barDismissed) {
+    const barEl = document.getElementById('ad-bar');
+    const textEl = document.getElementById('ad-bar-text');
+    textEl.append(bilingual(bar.bar_en || bar.text_en, bar.bar_ar || bar.text_ar));
+    const link = document.createElement('a');
+    link.className = 'ad-bar-link';
+    if (applyAdLink(link, bar.button_url)) {
+      link.append(bilingual(bar.button_en, bar.button_ar));
+      textEl.after(link);
+    }
+    barEl.hidden = false;
+    const fitBar = () => document.body.style.setProperty('--ad-bar-h', barEl.offsetHeight + 'px');
+    fitBar();
+    window.addEventListener('resize', fitBar);
+    document.body.classList.add('has-ad-bar');
+    window.dismissAdBar = function() {
+      barEl.hidden = true;
+      document.body.classList.remove('has-ad-bar');
+      try { localStorage.setItem('trateck_ad_bar_dismissed', barKey); } catch (e) { /* storage unavailable */ }
+    };
+  }
+
+  const card = pickAd(ads, 'place_home');
+  if (card && card.home_image_url) {
+    const section = document.getElementById('ad-home');
+    const imgLink = document.createElement('a');
+    const img = document.createElement('img');
+    img.className = 'ad-home-img';
+    img.src = card.home_image_url;
+    img.alt = '';
+    img.loading = 'lazy';
+    const hasLink = applyAdLink(imgLink, card.button_url);
+    if (hasLink) imgLink.append(img);
+    const body = document.createElement('div');
+    body.className = 'ad-home-body';
+    if (card.text_en || card.text_ar) {
+      const p = document.createElement('p');
+      p.className = 'ad-home-text';
+      p.append(bilingual(card.text_en, card.text_ar));
+      body.append(p);
+    }
+    if (hasLink) {
+      const btn = document.createElement('a');
+      btn.className = 'ad-home-btn';
+      applyAdLink(btn, card.button_url);
+      btn.append(bilingual(card.button_en, card.button_ar));
+      body.append(btn);
+    }
+    section.append(hasLink ? imgLink : img, body);
+    section.hidden = false;
+  }
 </script>
 
 </body>

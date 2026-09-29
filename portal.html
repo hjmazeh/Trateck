@@ -209,6 +209,23 @@
   }
   .btn-outline:hover { border-color: var(--gold); }
 
+  /* ── MARKETING AD (above the accounts) */
+  .portal-ad { margin-bottom: 20px; }
+  .portal-ad-inner {
+    display: flex; align-items: center; gap: 24px;
+    background: var(--navy-lt); border: 1px solid rgba(170,181,193,0.25);
+    padding: 20px;
+  }
+  .portal-ad-img { width: 132px; max-height: 236px; object-fit: cover; border-radius: 6px; display: block; flex-shrink: 0; }
+  .portal-ad-body { flex: 1; min-width: 0; }
+  .portal-ad-text { font-size: 16px; line-height: 1.6; color: var(--cream); margin-bottom: 16px; white-space: pre-line; }
+  .portal-ad-btn { margin-top: 0; }
+  .portal-ad-hint { font-size: 11px; color: var(--steel); text-align: center; margin-top: 8px; letter-spacing: 0.3px; }
+  @media (max-width: 600px) {
+    .portal-ad-inner { flex-direction: column; text-align: center; }
+    .portal-ad-img { width: min(200px, 60vw); max-height: 356px; }
+  }
+
   /* ── MT5 CARD */
   .mt5-card {
     background: var(--navy-lt);
@@ -473,6 +490,14 @@
 
     <!-- Dismissible notification banners for resolved deposit/withdrawal requests -->
     <div id="txn-banners"></div>
+
+    <!-- Marketing ad (staff panel → Ads), above the accounts -->
+    <div class="portal-ad" id="portal-ad" style="display:none;">
+      <div class="portal-ad-inner"></div>
+      <p class="portal-ad-hint" id="portal-ad-hint" style="display:none;">
+        <span class="lang-ar">مرّر للأسفل للوصول إلى حساباتك ↓</span><span class="lang-en">Scroll down to your accounts ↓</span>
+      </p>
+    </div>
 
     <!-- STATUS: email not verified -->
     <div class="status-card" id="card-not-verified" style="display:none;">
@@ -820,6 +845,7 @@
   import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, query, where, orderBy, limit, startAfter, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+  import { loadLiveAds, pickAd, bilingual, applyAdLink } from "./ads.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyC6Ir7zcz5-61Ox65NYpeXXUSVfqkF0Ouk",
@@ -980,7 +1006,49 @@
       }
       loadHistory(true);
     }
+    updatePortalAdHint();
     }
+
+    // Marketing ad above the accounts (managed from the staff panel's Ads
+    // page). The "scroll down" hint only makes sense once there are
+    // accounts below it, so it follows the status card.
+    function updatePortalAdHint() {
+      const hint = document.getElementById('portal-ad-hint');
+      if (hint) hint.style.display = document.getElementById('card-active').style.display === 'block' ? 'block' : 'none';
+    }
+    (async () => {
+      let ad = null;
+      try { ad = pickAd(await loadLiveAds(), 'place_portal'); } catch (e) { /* no ad this time */ }
+      if (!ad || (!ad.portal_image_url && !ad.text_en && !ad.text_ar)) return;
+      const box = document.getElementById('portal-ad');
+      const inner = box.querySelector('.portal-ad-inner');
+      const link = document.createElement('a');
+      const hasLink = applyAdLink(link, ad.button_url);
+      if (ad.portal_image_url) {
+        const img = document.createElement('img');
+        img.className = 'portal-ad-img';
+        img.src = ad.portal_image_url;
+        img.alt = '';
+        if (hasLink) { const imgLink = link.cloneNode(); imgLink.append(img); inner.append(imgLink); } else inner.append(img);
+      }
+      const body = document.createElement('div');
+      body.className = 'portal-ad-body';
+      if (ad.text_en || ad.text_ar) {
+        const p = document.createElement('p');
+        p.className = 'portal-ad-text';
+        p.append(bilingual(ad.text_en, ad.text_ar));
+        body.append(p);
+      }
+      if (hasLink) {
+        link.className = 'btn-primary portal-ad-btn';
+        link.append(bilingual(ad.button_en, ad.button_ar));
+        body.append(link);
+      }
+      inner.append(body);
+      box.style.display = 'block';
+      updatePortalAdHint();
+    })();
+
     renderStatusCard();
 
     // IB details copied onto every request, so staff always see who the

@@ -986,13 +986,15 @@
     // IB details copied onto every request, so staff always see who the
     // client belongs to even if the client is later moved to another IB.
     const ibSnapshot = () => ({
-      ib_id: data.ib_id || null, ib_name: data.ib_name || null,
-      main_ib_id: data.main_ib_id || null, main_ib_name: data.main_ib_name || null,
+      ib_id: data.ib_id || null, ib_name: data.ib_name || null, ib_code: data.ib_code || null,
+      main_ib_id: data.main_ib_id || null, main_ib_name: data.main_ib_name || null, main_ib_code: data.main_ib_code || null,
       product_name: data.product_name || null, mt5_group: data.mt5_group || null
     });
-    const ibLine = () => `IB: ${data.ib_name || data.ib_id || '—'}` +
-      (data.main_ib_id && data.main_ib_id !== data.ib_id ? ` (sub-IB of ${data.main_ib_name || data.main_ib_id})` : '') +
-      `\nProduct: ${data.product_name || '—'}\nMT5 group: ${data.mt5_group || '—'}`;
+    const withCode = (name, code) => (name || '—') + (code ? ` (${code})` : '');
+    const ibLine = () => `IB: ${withCode(data.ib_name || data.ib_id, data.ib_code)}` +
+      (data.main_ib_id && data.main_ib_id !== data.ib_id ? `, sub-IB of ${withCode(data.main_ib_name || data.main_ib_id, data.main_ib_code)}` : '') +
+      `\nProduct: ${data.product_name || '—'}\nMT5 group: ${data.mt5_group || '—'}` +
+      (data.ib_code ? `\nMT5 first name: ${data.ib_code} ${data.fullname || ''}` : '');
 
     // Request MT5 function — also used from the active view to request a
     // 2nd/3rd account, not just the first one from kyc_approved.

@@ -132,8 +132,10 @@ service cloud.firestore {
         unchanged('ib_link_code') &&
         unchanged('ib_id') &&
         unchanged('ib_name') &&
+        unchanged('ib_code') &&
         unchanged('main_ib_id') &&
         unchanged('main_ib_name') &&
+        unchanged('main_ib_code') &&
         unchanged('product_id') &&
         unchanged('product_name') &&
         unchanged('mt5_group') &&

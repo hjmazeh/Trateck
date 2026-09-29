@@ -629,8 +629,9 @@
           const d = snap.data();
           return {
             ib_link_code: d.code || c,
-            ib_id: d.ib_id, ib_name: d.ib_name || null,
+            ib_id: d.ib_id, ib_name: d.ib_name || null, ib_code: d.ib_code || null,
             main_ib_id: d.main_ib_id || d.ib_id, main_ib_name: d.main_ib_name || d.ib_name || null,
+            main_ib_code: d.main_ib_code || d.ib_code || null,
             product_id: d.product_id || null, product_name: d.product_name || null,
             mt5_group: d.mt5_group || null
           };
@@ -638,8 +639,8 @@
       } catch (e) { console.error('IB link lookup failed:', e); }
     }
     return {
-      ib_link_code: null, ib_id: 'retail', ib_name: 'Trateck Retail',
-      main_ib_id: 'retail', main_ib_name: 'Trateck Retail',
+      ib_link_code: null, ib_id: 'retail', ib_name: 'Trateck Retail', ib_code: null,
+      main_ib_id: 'retail', main_ib_name: 'Trateck Retail', main_ib_code: null,
       product_id: null, product_name: null, mt5_group: null
     };
   }

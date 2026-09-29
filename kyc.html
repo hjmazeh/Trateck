@@ -832,7 +832,7 @@
           to_email: 'support@trateck.me',
           reply_to: currentUser.email,
           subject: 'New KYC Submission — ' + fullnameVal,
-          message: `Client: ${fullnameVal}\nEmail: ${currentUser.email}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\nNew KYC submission received.\n\nIB: ${clientData.ib_name || clientData.ib_id || '—'}${clientData.main_ib_id && clientData.main_ib_id !== clientData.ib_id ? ' (sub-IB of ' + (clientData.main_ib_name || clientData.main_ib_id) + ')' : ''}\nProduct: ${clientData.product_name || '—'}`
+          message: `Client: ${fullnameVal}\nEmail: ${currentUser.email}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\nNew KYC submission received.\n\nIB: ${clientData.ib_name || clientData.ib_id || '—'}${clientData.ib_code ? ' (' + clientData.ib_code + ')' : ''}${clientData.main_ib_id && clientData.main_ib_id !== clientData.ib_id ? ' (sub-IB of ' + (clientData.main_ib_name || clientData.main_ib_id) + ')' : ''}\nProduct: ${clientData.product_name || '—'}`
         });
       } catch(emailErr) {
         console.log('Email notification failed:', emailErr);

@@ -233,16 +233,16 @@
 
   /* ── SLOGAN */
   .hero-slogan {
-    display: inline-flex; align-items: center; gap: 12px; width: fit-content;
-    margin-bottom: 30px; padding: 10px 18px 10px 12px;
+    display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+    margin-bottom: 30px; padding: 7px 13px 7px 8px;
     border: 1px solid rgba(170,181,193,0.35); border-radius: 3px;
     background: rgba(138,150,163,0.08);
     font-family: 'Satoshi', 'Inter', sans-serif; font-weight: 900;
-    font-size: 14px; letter-spacing: 4px; text-transform: uppercase; color: var(--cream);
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--cream);
     position: relative;
   }
-  .hero-slogan img { width: 26px; height: auto; display: block; }
-  body.arabic .hero-slogan { font-family: 'Noto Sans Arabic', sans-serif; letter-spacing: 0; font-size: 16px; padding: 10px 12px 10px 18px; }
+  .hero-slogan img { width: 18px; height: auto; display: block; }
+  body.arabic .hero-slogan { font-family: 'Noto Sans Arabic', sans-serif; letter-spacing: 0; font-size: 11px; padding: 7px 8px 7px 13px; }
 
   .hero-cta {
     display: inline-flex;
@@ -497,7 +497,6 @@
     .nav-logo img { height: 42px; }
     .nav-left .lang-toggle, .nav-links, .nav-btn.ghost { display: none; }
     .nav-right { gap: 10px; }
-    .nav-btn.solid { height: 40px; padding: 0 14px; font-size: 12px; }
     .nav-burger { display: inline-flex; }
     .nav-menu {
       position: absolute; top: 100%; left: 0; right: 0;
@@ -526,7 +525,7 @@
     body.arabic .hero-scroll { left: auto; right: 24px; }
     .pillars::before, .contact::before, .oldschool::before { left: 24px; right: 24px; }
     .risk-fineprint { padding: 20px 24px 0; text-align: center; }
-    .hero-slogan { font-size: 12px; letter-spacing: 3px; }
+    .hero-slogan { font-size: 9px; letter-spacing: 2px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -605,7 +604,6 @@
     </div>
     <div class="nav-actions">
       <a href="login.html" class="nav-btn ghost"><span class="lang-en">Client Login</span><span class="lang-ar">تسجيل الدخول</span></a>
-      <a href="signup.html" class="nav-btn solid"><span class="lang-en">Open Account</span><span class="lang-ar">افتح حساباً</span></a>
       <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-menu" onclick="toggleMenu()"><span></span><span></span><span></span></button>
     </div>
   </div>

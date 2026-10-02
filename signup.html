@@ -737,6 +737,15 @@
         created_at: serverTimestamp()
       });
 
+      // IB-view card: the only client details an IB sees in their portal
+      // (name and MT5 account numbers). Best-effort -- the staff panel also
+      // keeps these cards in sync, so a failure here is caught up later.
+      try {
+        await setDoc(doc(db, 'ib_clients', user.uid), { uid: user.uid, ib_id: ib.ib_id, main_ib_id: ib.main_ib_id, name: fullname, logins: [] });
+      } catch (e) {
+        console.error('IB view card not created:', e);
+      }
+
       // Send verification email -- best-effort, must not block account creation.
       try {
         await sendEmailVerification(user);
@@ -856,6 +865,15 @@
         terms_accepted_at: serverTimestamp(),
         created_at: serverTimestamp()
       });
+
+      // IB-view card: the only client details an IB sees in their portal
+      // (name and MT5 account numbers). Best-effort -- the staff panel also
+      // keeps these cards in sync, so a failure here is caught up later.
+      try {
+        await setDoc(doc(db, 'ib_clients', user.uid), { uid: user.uid, ib_id: ib.ib_id, main_ib_id: ib.main_ib_id, name: user.displayName || user.email.split('@')[0], logins: [] });
+      } catch (e) {
+        console.error('IB view card not created:', e);
+      }
       window.location.href = 'portal.html';
     } catch (error) {
       btn.disabled = false;

@@ -72,6 +72,37 @@ service cloud.firestore {
       allow read, write: if isAdmin();
     }
 
+    // IB portal (ib.trateck.me). An IB signs in with their own client
+    // account; staff link that account to the IB, and the staff panel
+    // writes ib_portal_access/{thatUid} = { ib_id, tier, ... }.
+    function myIbId() {
+      return get(/databases/$(database)/documents/ib_portal_access/$(request.auth.uid)).data.ib_id;
+    }
+    match /ib_portal_access/{uid} {
+      allow get: if isAdmin() || (isSignedIn() && request.auth.uid == uid);
+      allow list, write: if isAdmin();
+    }
+
+    // One card per client with ONLY what an IB may see: name and MT5
+    // account numbers (+ which IB / main IB they belong to). IBs never
+    // read users/ docs. An IB reads the cards of their own clients (a main
+    // IB also their sub-IBs' clients). The client creates their own card
+    // at signup, matching their users/ doc; everything after is staff.
+    match /ib_clients/{uid} {
+      allow read: if isAdmin() || (isSignedIn()
+        && exists(/databases/$(database)/documents/ib_portal_access/$(request.auth.uid))
+        && (resource.data.ib_id == myIbId() || resource.data.main_ib_id == myIbId()));
+      allow create: if isAdmin() || (isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['uid', 'ib_id', 'main_ib_id', 'name', 'logins'])
+        && request.resource.data.uid == uid
+        && request.resource.data.ib_id == get(/databases/$(database)/documents/users/$(uid)).data.ib_id
+        && request.resource.data.main_ib_id == get(/databases/$(database)/documents/users/$(uid)).data.main_ib_id
+        && request.resource.data.name == get(/databases/$(database)/documents/users/$(uid)).data.fullname
+        && request.resource.data.logins.size() == 0);
+      allow update, delete: if isAdmin();
+    }
+
     // Log of clients moved from one IB to another. Staff only, append-only.
     match /ib_moves/{moveId} {
       allow read, create: if isAdmin();

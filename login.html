@@ -857,11 +857,12 @@
         created_at: serverTimestamp()
       });
 
-      // IB-view card: the only client details an IB sees in their portal
-      // (name and MT5 account numbers). Best-effort -- the staff panel also
-      // keeps these cards in sync, so a failure here is caught up later.
+      // IB-view cards: the only client details IBs see in their portal --
+      // account numbers (main IB) and name + account numbers (own IB only).
+      // Best-effort -- the staff panel keeps them in sync anyway.
       try {
-        await setDoc(doc(db, 'ib_clients', user.uid), { uid: user.uid, ib_id: ib.ib_id, main_ib_id: ib.main_ib_id, name: user.displayName || user.email.split('@')[0], logins: [] });
+        await setDoc(doc(db, 'ib_accounts', user.uid), { uid: user.uid, ib_id: ib.ib_id, main_ib_id: ib.main_ib_id, logins: [] });
+        await setDoc(doc(db, 'ib_clients', user.uid), { uid: user.uid, ib_id: ib.ib_id, name: user.displayName || user.email.split('@')[0], logins: [] });
       } catch (e) {
         console.error('IB view card not created:', e);
       }

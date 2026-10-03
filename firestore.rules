@@ -83,6 +83,12 @@ service cloud.firestore {
       allow create: if isStaff();
     }
 
+    // Written only by the MT5 hub (with its service account, which bypasses
+    // these rules). Staff can see whether it's running.
+    match /hub_status/{instance} {
+      allow read: if isStaff();
+    }
+
     // Marketing ads shown on the homepage and in the portal. Anyone
     // (signed in or not) can read an ad that's switched on -- the site
     // queries `where active == true` -- while drafts and switched-off ads
@@ -161,6 +167,12 @@ service cloud.firestore {
         && request.resource.data.main_ib_id == get(/databases/$(database)/documents/users/$(uid)).data.main_ib_id
         && request.resource.data.logins.size() == 0);
       allow update, delete: if can('clients.view');
+    }
+
+    // The hub's daily shadow payout report (what it would pay each IB next
+    // to what MT5 paid). Written only by the hub.
+    match /hub_shadow/{day} {
+      allow read: if canAny(['rates.view', 'rates.edit', 'rebates.send']);
     }
 
     // Log of clients moved from one IB to another. Append-only.

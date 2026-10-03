@@ -756,6 +756,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         referral_code: user.uid.substring(0, 8).toUpperCase(),
         referred_by: referredBy ? referredBy.trim().toUpperCase() : null,
         terms_accepted_at: serverTimestamp(),
+        attribution: (window.getAttribution && window.getAttribution()) || null,
         created_at: serverTimestamp()
       });
 
@@ -887,6 +888,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         referral_code: user.uid.substring(0, 8).toUpperCase(),
         referred_by: referredBy ? referredBy.trim().toUpperCase() : null,
         terms_accepted_at: serverTimestamp(),
+        attribution: (window.getAttribution && window.getAttribution()) || null,
         created_at: serverTimestamp()
       });
 
@@ -958,5 +960,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   })();
 </script>
 
+<script src="attribution.js"></script>
 </body>
 </html>

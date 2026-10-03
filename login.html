@@ -854,6 +854,7 @@
         referral_code: user.uid.substring(0, 8).toUpperCase(),
         referred_by: null,
         terms_accepted_at: serverTimestamp(),
+        attribution: (window.getAttribution && window.getAttribution()) || null,
         created_at: serverTimestamp()
       });
 
@@ -889,5 +890,6 @@
   })();
 </script>
 
+<script src="attribution.js"></script>
 </body>
 </html>

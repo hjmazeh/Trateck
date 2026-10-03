@@ -559,12 +559,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   body.has-ad-bar nav { top: var(--ad-bar-h, 40px); }
   body.has-ad-bar .hero { margin-top: var(--ad-bar-h, 40px); }
 
+  /* The homepage ad sits inside the hero, under the slogan. With an ad the
+     hero starts right under the logo instead of being vertically centred. */
+  body.has-home-ad .hero { justify-content: flex-start; padding-top: 104px; }
+  body.has-home-ad .hero-slogan { margin-bottom: 24px; }
   .ad-home {
-    display: flex; align-items: center; gap: 48px;
-    max-width: 960px; margin: 0 auto; padding: 40px 60px 100px;
+    display: flex; align-items: center; gap: 36px;
+    max-width: 780px; margin: 0 0 40px; position: relative;
   }
   .ad-home-img {
-    width: 270px; flex-shrink: 0; aspect-ratio: 9 / 16; object-fit: cover;
+    width: 200px; flex-shrink: 0; aspect-ratio: 9 / 16; object-fit: cover;
     border-radius: 10px; border: 1px solid rgba(170,181,193,0.2);
     box-shadow: 0 20px 50px rgba(0,0,0,0.35);
   }
@@ -583,9 +587,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   body.arabic .ad-home-btn { letter-spacing: 0; }
   @media (max-width: 768px) {
     .ad-bar { padding: 8px 44px; font-size: 12px; flex-wrap: wrap; gap: 4px 10px; }
-    .ad-home { flex-direction: column; gap: 28px; padding: 24px 24px 72px; text-align: center; }
-    body.arabic .ad-home { text-align: center; }
-    .ad-home-img { width: min(260px, 72vw); }
+    body.has-home-ad .hero { padding-top: 92px; }
+    .ad-home { flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 32px; }
+    .ad-home-img { width: min(200px, 56vw); }
   }
 </style>
 </head>
@@ -638,6 +642,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="lang-ar">الأخلاق رقيبُنا</span>
   </div>
 
+  <div class="ad-home" id="ad-home" hidden></div>
+
   <h1 class="hero-title">
     <span class="lang-en">
       Markets don't sleep.
@@ -677,8 +683,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="lang-ar">تمرير</span>
   </div>
 </section>
-
-<section class="ad-home" id="ad-home" hidden></section>
 
 <section class="pillars">
   <div class="pillar">
@@ -904,6 +908,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     section.append(hasLink ? imgLink : img, body);
     section.hidden = false;
+    document.body.classList.add('has-home-ad');
   }
 </script>
 

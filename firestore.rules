@@ -6,15 +6,49 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isAdmin() {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.is_admin == true;
+    // ── Staff permissions ──
+    // A staff member's own users/{uid} doc carries `perms` (copied from
+    // their role by the staff panel), or role 'super_admin' for everything.
+    // Staff from before roles existed (is_admin, no perms) can do
+    // everything except manage staff; the old Marketing role (role
+    // 'marketing', no perms) can only manage ads. Clients have none.
+    function hasMe() {
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isSuperOf(d) {
+      return d.get('role', null) == 'super_admin' || d.get('is_super_admin', false) == true;
+    }
+    function canAnyOf(d, list) {
+      return isSuperOf(d)
+        || (('perms' in d) && d.perms.hasAny(list))
+        || (!('perms' in d) && d.get('is_admin', false) == true && list.removeAll(['staff.manage']).size() > 0)
+        || (!('perms' in d) && d.get('role', null) == 'marketing' && list.hasAny(['ads.manage']));
+    }
+    function isStaffOf(d) {
+      return isSuperOf(d)
+        || (('perms' in d) && d.perms.size() > 0)
+        || (!('perms' in d) && (d.get('is_admin', false) == true || d.get('role', null) == 'marketing'));
+    }
+    function isSuper() { return hasMe() && isSuperOf(me()); }
+    function isStaff() { return hasMe() && isStaffOf(me()); }
+    function canAny(list) { return hasMe() && canAnyOf(me(), list); }
+    function can(p) { return canAny([p]); }
+
+    // Anything that needs the client list loaded.
+    function canReadUsers() {
+      return canAny(['clients.view', 'clients.create', 'kyc.review', 'kyc.view', 'mt5.manage',
+        'ibs.view', 'ibs.edit', 'ibs.change', 'ibs.make', 'ibs.import',
+        'accounts.view', 'referrals.view', 'sources.view', 'rebates.send', 'staff.manage']);
     }
 
-    // Marketing staff: not admins (no client data at all) -- only the ads.
-    function isMarketing() {
-      return isSignedIn() &&
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', null) == 'marketing';
+    // Fields only staff management may set. A client's own doc, and any
+    // client doc staff create, must not carry them.
+    function noStaffFields(d) {
+      return !d.keys().hasAny(['role', 'role_name', 'perms', 'is_super_admin', 'role_updated_at', 'role_updated_by'])
+        && d.get('is_admin', false) == false;
     }
 
     // The IB a client is tagged with at signup must match the partner link
@@ -32,30 +66,41 @@ service cloud.firestore {
       );
     }
 
-    // Admin-editable operational settings (e.g. the Whish Money number).
+    // Operational settings, readable by any signed-in client so the portal
+    // can show them: the Whish number (Transfer Means), symbol classes and
+    // referral programs (Rates).
     match /settings/{settingId} {
       allow read: if isSignedIn();
-      allow write: if isAdmin();
+      allow write: if isSuper()
+        || (settingId == 'whish_money' && can('transfer.edit'))
+        || (settingId in ['symbol_classes', 'referral_program'] && can('rates.edit'));
     }
 
-    // Staff activity log -- append-only in practice.
+    // Staff activity log -- any staff member records their own actions;
+    // reading it is "Activity log". Append-only.
     match /admin_logs/{logId} {
-      allow read: if isAdmin();
-      allow create: if isAdmin() || isMarketing();
+      allow read: if can('activity.view');
+      allow create: if isStaff();
     }
 
     // Marketing ads shown on the homepage and in the portal. Anyone
     // (signed in or not) can read an ad that's switched on -- the site
     // queries `where active == true` -- while drafts and switched-off ads
-    // stay visible to staff only.
+    // stay visible to staff with "Ads" only.
     match /ads/{adId} {
-      allow get, list: if resource.data.active == true || isAdmin() || isMarketing();
-      allow create, update, delete: if isAdmin() || isMarketing();
+      allow get, list: if resource.data.active == true || can('ads.manage');
+      allow create, update, delete: if can('ads.manage');
     }
 
-    // IB records (main IBs and sub-IBs, with their products). Staff only.
+    // IB records (main IBs and sub-IBs, with their products and rates).
+    // "Make a client an IB" may only create a new one; "Edit rates" may
+    // only change the rate history.
     match /ibs/{ibId} {
-      allow read, write: if isAdmin();
+      allow read: if isStaff();
+      allow create: if canAny(['ibs.edit', 'ibs.make', 'ibs.import']);
+      allow update: if canAny(['ibs.edit', 'ibs.import'])
+        || (can('rates.edit') && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rate_history', 'updated_at', 'updated_by']));
+      allow delete: if isSuper();
     }
 
     // One doc per partner link (the code in ?ib=CODE), plus a '_default'
@@ -63,24 +108,25 @@ service cloud.firestore {
     // code they arrived with, but can't list them all.
     match /ib_links/{code} {
       allow get: if isSignedIn();
-      allow list, write: if isAdmin();
+      allow list: if isStaff();
+      allow write: if canAny(['ibs.edit', 'ibs.make', 'ibs.import']);
     }
 
-    // Product catalog (MT5 groups) imported from the Backoffice, picked from
-    // when giving an IB its products. Staff only.
+    // Product catalog (MT5 groups) imported from the Backoffice.
     match /products/{productId} {
-      allow read, write: if isAdmin();
+      allow read: if isStaff();
+      allow write: if can('ibs.import');
     }
 
     // IB portal (ib.trateck.me). An IB signs in with their own client
-    // account; staff link that account to the IB, and the staff panel
-    // writes ib_portal_access/{thatUid} = { ib_id, tier, ... }.
+    // account; the staff panel (anyone who can view clients) keeps
+    // ib_portal_access/{thatUid} = { ib_id, ... } in sync.
     function myIbId() {
       return get(/databases/$(database)/documents/ib_portal_access/$(request.auth.uid)).data.ib_id;
     }
     match /ib_portal_access/{uid} {
-      allow get: if isAdmin() || (isSignedIn() && request.auth.uid == uid);
-      allow list, write: if isAdmin();
+      allow get: if can('clients.view') || (isSignedIn() && request.auth.uid == uid);
+      allow list, write: if can('clients.view');
     }
 
     // What IBs may see about clients -- never users/ docs:
@@ -89,42 +135,45 @@ service cloud.firestore {
     //  IB (so a main IB sees their sub-IBs' clients as account numbers).
     // Neither says anything a sub-IB could read about their main IB.
     // The client creates their own cards at signup, matching their users/
-    // doc; everything after is staff.
+    // doc; everything after is the staff panel's sync.
     match /ib_clients/{uid} {
-      allow read: if isAdmin() || (isSignedIn()
+      allow read: if can('clients.view') || (isSignedIn()
         && exists(/databases/$(database)/documents/ib_portal_access/$(request.auth.uid))
         && resource.data.ib_id == myIbId());
-      allow create: if isAdmin() || (isSignedIn()
+      allow create: if can('clients.view') || (isSignedIn()
         && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['uid', 'ib_id', 'name', 'logins'])
         && request.resource.data.uid == uid
         && request.resource.data.ib_id == get(/databases/$(database)/documents/users/$(uid)).data.ib_id
         && request.resource.data.name == get(/databases/$(database)/documents/users/$(uid)).data.fullname
         && request.resource.data.logins.size() == 0);
-      allow update, delete: if isAdmin();
+      allow update, delete: if can('clients.view');
     }
     match /ib_accounts/{uid} {
-      allow read: if isAdmin() || (isSignedIn()
+      allow read: if can('clients.view') || (isSignedIn()
         && exists(/databases/$(database)/documents/ib_portal_access/$(request.auth.uid))
         && resource.data.main_ib_id == myIbId());
-      allow create: if isAdmin() || (isSignedIn()
+      allow create: if can('clients.view') || (isSignedIn()
         && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['uid', 'ib_id', 'main_ib_id', 'logins'])
         && request.resource.data.uid == uid
         && request.resource.data.ib_id == get(/databases/$(database)/documents/users/$(uid)).data.ib_id
         && request.resource.data.main_ib_id == get(/databases/$(database)/documents/users/$(uid)).data.main_ib_id
         && request.resource.data.logins.size() == 0);
-      allow update, delete: if isAdmin();
+      allow update, delete: if can('clients.view');
     }
 
-    // Log of clients moved from one IB to another. Staff only, append-only.
+    // Log of clients moved from one IB to another. Append-only.
     match /ib_moves/{moveId} {
-      allow read, create: if isAdmin();
+      allow read: if canAny(['clients.view', 'ibs.view']);
+      allow create: if canAny(['ibs.change', 'ibs.edit', 'ibs.make']);
     }
 
+    // Deposit requests: the client submits a receipt + claimed amount;
+    // every status change after that is staff with "Process deposits".
     match /funding_requests/{requestId} {
-      allow get: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow list: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow get, list: if (isSignedIn() && resource.data.uid == request.auth.uid)
+        || canAny(['deposits.process', 'transactions.history']);
 
       allow create: if isSignedIn()
         && request.resource.data.uid == request.auth.uid
@@ -132,21 +181,22 @@ service cloud.firestore {
         && request.resource.data.approved_amount == null
         && request.resource.data.resolved_by == null;
 
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow update: if can('deposits.process');
+      allow delete: if isSuper();
     }
 
+    // Withdrawal requests: same, with "Process withdrawals".
     match /withdrawal_requests/{requestId} {
-      allow get: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow list: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow get, list: if (isSignedIn() && resource.data.uid == request.auth.uid)
+        || canAny(['withdrawals.process', 'transactions.history']);
 
       allow create: if isSignedIn()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.status == 'pending'
         && request.resource.data.resolved_by == null;
 
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow update: if can('withdrawals.process');
+      allow delete: if isSuper();
     }
 
     match /users/{userId} {
@@ -154,21 +204,49 @@ service cloud.firestore {
         return isSignedIn() && request.auth.uid == userId;
       }
 
-      function unchanged(field) {
-        return !(field in request.resource.data.diff(resource.data).affectedKeys());
+      // What each staff permission may change on a client's doc (d = the
+      // staff member's own doc, keys = the fields being changed). Nobody but
+      // a super admin may touch a super admin's doc or make someone one.
+      function staffUpdateOf(d, keys) {
+        return isSuperOf(d) || (
+          isStaffOf(d) && !isSuperOf(resource.data) && !isSuperOf(request.resource.data) && (
+            // KYC review: approve / reject
+            (keys.hasOnly(['status', 'rejection_reason']) && canAnyOf(d, ['kyc.review'])
+              && request.resource.data.status in ['kyc_approved', 'kyc_rejected']) ||
+            // MT5 accounts (and crediting the referral once the first one exists)
+            (keys.hasOnly(['mt5_accounts', 'mt5_login', 'mt5_password', 'mt5_server', 'mt5_history',
+              'mt5_pending_renames', 'status', 'referral_credited', 'referral_count']) && canAnyOf(d, ['mt5.manage'])
+              && request.resource.data.get('status', null) in ['active', resource.data.get('status', null)]) ||
+            // Crediting a referrer after a client is created manually
+            (keys.hasOnly(['referral_count', 'referral_credited']) && canAnyOf(d, ['clients.create'])) ||
+            // IB tag: change IB, make IB (own account), IB edits that move clients
+            (keys.hasOnly(['ib_link_code', 'ib_id', 'ib_name', 'ib_code', 'main_ib_id', 'main_ib_name', 'main_ib_code',
+              'product_id', 'product_name', 'mt5_group', 'ib_assigned_at', 'mt5_pending_renames'])
+              && canAnyOf(d, ['ibs.change', 'ibs.edit', 'ibs.make'])) ||
+            // Rebate notifications
+            (keys.hasOnly(['last_rebate_amount', 'last_rebate_paid_at', 'rebate_history']) && canAnyOf(d, ['rebates.send'])) ||
+            // Staff roles
+            (keys.hasOnly(['role', 'role_name', 'perms', 'is_admin', 'role_updated_at', 'role_updated_by']) && canAnyOf(d, ['staff.manage']))
+          )
+        );
       }
 
-      allow get: if isOwner() || isAdmin();
-      allow list: if isAdmin();
+      // Staff creating a doc: a client (Create Client) or a staff account.
+      function staffCreateOf(d, nd) {
+        return isSuperOf(d)
+          || (canAnyOf(d, ['staff.manage']) && !isSuperOf(nd))
+          || (canAnyOf(d, ['clients.create']) && noStaffFields(nd));
+      }
 
-      // Signup: client creates their own doc with safe starting values and
-      // an IB tag that matches their partner link -- OR an admin creates a
-      // fully-formed client doc directly.
-      allow create: if isAdmin() || (
+      allow get: if isOwner() || canReadUsers();
+      allow list: if canReadUsers();
+
+      // Signup: the client creates their own doc with safe starting values
+      // -- OR staff create one (Create Client / Add Staff).
+      allow create: if (hasMe() && staffCreateOf(me(), request.resource.data)) || (
         isOwner()
         && request.resource.data.uid == userId
-        && (!('is_admin' in request.resource.data) || request.resource.data.is_admin == false)
-        && !('role' in request.resource.data)
+        && noStaffFields(request.resource.data)
         && request.resource.data.status == 'pending'
         && request.resource.data.mt5_login == null
         && request.resource.data.mt5_password == null
@@ -176,40 +254,10 @@ service cloud.firestore {
       );
 
       // Self-service updates: only KYC submission and MT5 account requests,
-      // never touching privileged fields -- including the IB tag, which only
-      // staff can change (and every change is logged in ib_moves).
-      allow update: if isAdmin() || (
+      // never touching privileged fields.
+      allow update: if (hasMe() && staffUpdateOf(me(), request.resource.data.diff(resource.data).affectedKeys())) || (
         isOwner() &&
-        unchanged('is_admin') &&
-        unchanged('role') &&
-        unchanged('mt5_login') &&
-        unchanged('mt5_password') &&
-        unchanged('mt5_server') &&
-        unchanged('mt5_accounts') &&
-        unchanged('mt5_history') &&
-        unchanged('mt5_pending_renames') &&
-        unchanged('last_rebate_amount') &&
-        unchanged('last_rebate_paid_at') &&
-        unchanged('rebate_history') &&
-        unchanged('referral_code') &&
-        unchanged('referral_count') &&
-        unchanged('referral_credited') &&
-        unchanged('rejection_reason') &&
-        unchanged('created_by') &&
-        unchanged('email') &&
-        unchanged('uid') &&
-        unchanged('ib_link_code') &&
-        unchanged('ib_id') &&
-        unchanged('ib_name') &&
-        unchanged('ib_code') &&
-        unchanged('main_ib_id') &&
-        unchanged('main_ib_name') &&
-        unchanged('main_ib_code') &&
-        unchanged('product_id') &&
-        unchanged('product_name') &&
-        unchanged('mt5_group') &&
-        unchanged('ib_assigned_at') &&
-        unchanged('terms_accepted_at') &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['is_admin', 'is_super_admin', 'role', 'role_name', 'perms', 'role_updated_at', 'role_updated_by', 'mt5_login', 'mt5_password', 'mt5_server', 'mt5_accounts', 'mt5_history', 'mt5_pending_renames', 'last_rebate_amount', 'last_rebate_paid_at', 'rebate_history', 'referral_code', 'referral_count', 'referral_credited', 'rejection_reason', 'created_by', 'email', 'uid', 'ib_link_code', 'ib_id', 'ib_name', 'ib_code', 'main_ib_id', 'main_ib_name', 'main_ib_code', 'product_id', 'product_name', 'mt5_group', 'ib_assigned_at', 'terms_accepted_at']) &&
         (
           // Submitting or resubmitting KYC documents
           (resource.data.status in ['pending', 'pending_kyc', 'kyc_rejected'] &&
@@ -224,7 +272,7 @@ service cloud.firestore {
         )
       );
 
-      allow delete: if isAdmin();
+      allow delete: if isSuper();
     }
   }
 }

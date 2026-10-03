@@ -587,13 +587,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   body.arabic .ad-home-btn { letter-spacing: 0; }
   /* Wide banner: fills the page width, text and button in a row under it. */
   .ad-home.wide { flex-direction: column; align-items: stretch; gap: 18px; max-width: none; width: 100%; }
-  .ad-home.wide .ad-home-img { width: 100%; aspect-ratio: 16 / 5; }
+  .ad-home.wide[data-size="large"] { width: 75%; }
+  .ad-home.wide[data-size="medium"] { width: 50%; }
+  .ad-home.wide[data-size="small"] { width: 33%; min-width: 280px; }
+  .ad-home.wide .ad-home-img { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; }
+  .ad-home[data-size="full"]:not(.wide) .ad-home-img { width: 320px; }
+  .ad-home[data-size="large"]:not(.wide) .ad-home-img { width: 270px; }
+  .ad-home[data-size="small"]:not(.wide) .ad-home-img { width: 150px; }
   .ad-home.wide > a, .ad-home.wide picture { display: block; }
   .ad-home.wide .ad-home-body { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
   .ad-home.wide .ad-home-text { margin-bottom: 0; font-size: clamp(18px, 2vw, 24px); }
   @media (max-width: 768px) {
-    .ad-home.wide .ad-home-img { aspect-ratio: 16 / 7; }
-    .ad-home.wide.has-story .ad-home-img { width: min(200px, 56vw); aspect-ratio: 9 / 16; }
+    .ad-home.wide[data-size] { width: 100%; min-width: 0; }
+    .ad-home.wide.has-story .ad-home-img { width: min(200px, 56vw); aspect-ratio: 9 / 16; object-fit: cover; }
+    .ad-home[data-size]:not(.wide) .ad-home-img { width: min(200px, 56vw); }
     .ad-home.wide .ad-home-body { flex-direction: column; align-items: flex-start; gap: 16px; }
     .ad-bar { padding: 8px 44px; font-size: 12px; flex-wrap: wrap; gap: 4px 10px; }
     body.has-home-ad .hero { padding-top: 92px; }
@@ -899,6 +906,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // A wide banner fills the page width on computers; phones get the
     // story image instead when there is one.
     let visual = img;
+    section.dataset.size = ['full', 'large', 'medium', 'small'].includes(card.home_size) ? card.home_size : (card.banner_image_url ? 'full' : 'medium');
     if (card.banner_image_url) {
       section.classList.add('wide');
       img.src = card.banner_image_url;

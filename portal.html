@@ -1083,8 +1083,8 @@
       // there is for anything a client actually sees. Best-effort: a failed
       // email shouldn't block the client's request from going through.
       try {
-        await emailjs.send('service_6bt90q9', 'template_e21la3q', {
-          to_email: 'support@trateck.me',
+        await emailjs.send('service_6bt90q9', 'template_zbiy3td', {
+          // Staff alert template: recipient (support@trateck.me) is fixed in EmailJS.
           reply_to: user.email,
           subject: 'MT5 Account Requested — ' + (data.fullname || ''),
           message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nPhone: ${data.phone || ''}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\n${wasActive ? 'Client is already active and has requested an additional MT5 account.' : 'Client is KYC-approved and has requested an MT5 account.'}\n\n${ibLine()}`
@@ -1216,8 +1216,8 @@
         });
 
         try {
-          await emailjs.send('service_6bt90q9', 'template_e21la3q', {
-            to_email: 'support@trateck.me',
+          await emailjs.send('service_6bt90q9', 'template_zbiy3td', {
+            // Staff alert template: recipient (support@trateck.me) is fixed in EmailJS.
             reply_to: user.email,
             subject: 'New Deposit Request — ' + (data.fullname || ''),
             message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\n\n${ibLine()}`
@@ -1309,8 +1309,8 @@
         });
 
         try {
-          await emailjs.send('service_6bt90q9', 'template_e21la3q', {
-            to_email: 'support@trateck.me',
+          await emailjs.send('service_6bt90q9', 'template_zbiy3td', {
+            // Staff alert template: recipient (support@trateck.me) is fixed in EmailJS.
             reply_to: user.email,
             subject: 'New Withdrawal Request — ' + (data.fullname || ''),
             message: `Client: ${data.fullname || ''}\nEmail: ${user.email}\nMT5 Login: ${selectedLogin}\nAmount: $${amount}\nMethod: ${method}\nDestination: ${JSON.stringify(destination)}\n\n${ibLine()}`

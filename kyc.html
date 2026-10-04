@@ -828,8 +828,8 @@
       // way there is for anything a client actually sees.
       try {
         const fullnameVal = document.getElementById('fullname').value.trim();
-        await emailjs.send('service_6bt90q9', 'template_e21la3q', {
-          to_email: 'support@trateck.me',
+        await emailjs.send('service_6bt90q9', 'template_zbiy3td', {
+          // Staff alert template: recipient (support@trateck.me) is fixed in EmailJS.
           reply_to: currentUser.email,
           subject: 'New KYC Submission — ' + fullnameVal,
           message: `Client: ${fullnameVal}\nEmail: ${currentUser.email}\nSubmitted: ${new Date().toLocaleString('en-GB', { timeZone: 'Asia/Beirut' })}\n\nNew KYC submission received.\n\nIB: ${clientData.ib_name || clientData.ib_id || '—'}${clientData.ib_code ? ' (' + clientData.ib_code + ')' : ''}${clientData.main_ib_id && clientData.main_ib_id !== clientData.ib_id ? ' (sub-IB of ' + (clientData.main_ib_name || clientData.main_ib_id) + ')' : ''}\nProduct: ${clientData.product_name || '—'}`

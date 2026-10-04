@@ -18,10 +18,14 @@ function decode(v) {
 // Every ad that's switched on and inside its start/end dates, the one that
 // started most recently first -- the same rule the staff panel uses to
 // show which ad is "on site" for each placement.
-export async function loadLiveAds() {
+// appCheckToken: the page's App Check token. Once App Check is enforced on
+// Firestore, a request without it is refused.
+export async function loadLiveAds(appCheckToken) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (appCheckToken) headers['X-Firebase-AppCheck'] = appCheckToken;
   const res = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents:runQuery?key=${API_KEY}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ structuredQuery: {
       from: [{ collectionId: 'ads' }],
       where: { fieldFilter: { field: { fieldPath: 'active' }, op: 'EQUAL', value: { booleanValue: true } } },

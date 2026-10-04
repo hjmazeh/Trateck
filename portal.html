@@ -842,6 +842,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider, getToken } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
   import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, updateDoc, serverTimestamp, collection, addDoc, query, where, orderBy, limit, startAfter, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
@@ -857,6 +858,16 @@
   };
 
   const app = initializeApp(firebaseConfig);
+
+  // App Check: proves requests come from this site in a real browser
+  // (invisible reCAPTCHA v3). Set up before any other Firebase call.
+  const appCheck = initializeAppCheck(app, { provider: new ReCaptchaV3Provider('6LcYP98tAAAAAOtsNOdfjsz6NVIvOxotT_DJ8H75'), isTokenAutoRefreshEnabled: true });
+  // A token for direct (non-SDK) requests such as the ads query; empty if
+  // reCAPTCHA couldn't load (e.g. a blocker), so the page still works.
+  async function appCheckToken() {
+    try { return (await Promise.race([getToken(appCheck), new Promise((_, r) => setTimeout(r, 4000))])).token; } catch { return ''; }
+  }
+
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
@@ -1018,7 +1029,7 @@
     }
     (async () => {
       let ad = null;
-      try { ad = pickAd(await loadLiveAds(), 'place_portal'); } catch (e) { /* no ad this time */ }
+      try { ad = pickAd(await loadLiveAds(await appCheckToken()), 'place_portal'); } catch (e) { /* no ad this time */ }
       if (!ad || (!ad.portal_image_url && !ad.text_en && !ad.text_ar)) return;
       const box = document.getElementById('portal-ad');
       const inner = box.querySelector('.portal-ad-inner');

@@ -175,6 +175,25 @@ service cloud.firestore {
       allow read: if canAny(['rates.view', 'rates.edit', 'rebates.send']);
     }
 
+    // MT5 jobs for the hub (balance operations, account lookups). Staff with
+    // "MT5 balance operations" (an explicit permission: legacy admins don't
+    // get it) create them queued; only the hub (service account) runs them
+    // and writes the result. Never edited or deleted from the panel. The hub
+    // checks the requester's permissions again itself.
+    match /hub_jobs/{jobId} {
+      function mayRunMt5Jobs() {
+        return hasMe() && (isSuperOf(me()) || (('perms' in me()) && me().perms.hasAny(['mt5.balance'])));
+      }
+      allow read: if mayRunMt5Jobs();
+      allow create: if mayRunMt5Jobs()
+        && request.resource.data.keys().hasOnly(['type', 'params', 'status', 'requested_by_uid', 'requested_by_email', 'created_at'])
+        && request.resource.data.type in ['lookup', 'balance']
+        && request.resource.data.status == 'queued'
+        && request.resource.data.requested_by_uid == request.auth.uid
+        && request.resource.data.created_at == request.time
+        && request.resource.data.params is map;
+    }
+
     // Log of clients moved from one IB to another. Append-only.
     match /ib_moves/{moveId} {
       allow read: if canAny(['clients.view', 'ibs.view']);
